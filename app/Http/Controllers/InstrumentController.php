@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instrument;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class InstrumentController extends Controller
@@ -16,6 +16,8 @@ class InstrumentController extends Controller
         $viewData = [];
         $viewData['title'] = 'Instrument - Online Store';
         $viewData['subtitle'] = 'List of instruments';
+        $viewData['message'] = Session::get('message');
+        Session::forget('message');
         $viewData['instruments'] = Instrument::all();
 
         return view('instrument.index')->with('viewData', $viewData);
@@ -34,7 +36,7 @@ class InstrumentController extends Controller
 
     public function create(): View
     {
-        $viewData = []; //to be sent to the view
+        $viewData = [];
         $viewData['title'] = 'Create instrument';
 
         return view('instrument.create')->with('viewData', $viewData);
@@ -42,43 +44,28 @@ class InstrumentController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'price' => 'required|numeric|gt:0',
-        ]);
 
+        $instrument = new Instrument;
+        $instrument->validate($request->only(['name', 'price']));
         $instrument = Instrument::create($request->only(['name', 'price']));
 
-        return redirect()->route('instrument.success', [
-            'id' => $instrument->id,
-            'name' => $instrument->name,
-            'price' => $instrument->price,
-        ]);
+        $viewData = [
+            'message' => 'Instrument created successfully!',
+        ];
+
+        $message = 'Instrument created successfully!';
+
+        return redirect()->route('instrument.index')->with('message', $message);
+
     }
 
-    public function success(Request $request): View|RedirectResponse
-    {
-        $instrument = $request->only(['id', 'name', 'price']);
-
-        if (empty($instrument['id']) || empty($instrument['name']) || empty($instrument['price'])) {
-            Log::info('Instrument details missing in query parameters.');
-
-            return redirect()->route('home.index');
-        }
-
-        $viewData = [];
-        $viewData['title'] = 'Success - AGS';
-        $viewData['subtitle'] = 'Instrument successfully created!';
-        $viewData['instrument'] = $instrument;
-
-        return view('instrument.success')->with('viewData', $viewData);
-    }
-
-    public function delete($id): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
         $instrument = Instrument::findOrFail($id);
         $instrument->delete();
 
-        return redirect()->route('instrument.index')->with('success', 'Instrument deleted successfully.');
+        $message = 'Instrument deleted successfully!';
+
+        return redirect()->route('instrument.index')->with('message', $message);
     }
 }

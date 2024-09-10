@@ -11,10 +11,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instrument', function (Blueprint $table) {
+        Schema::create('instruments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description');
+            $table->string('category');
+            $table->string('brand');
             $table->integer('price');
+            $table->float('reviewSum');
+            $table->integer('numberOfReviews');
+            //Esto en realidad es stock
+            $table->integer('quantity'); 
+            $table->string('image');
             $table->timestamps();
         });
     }
@@ -24,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('instrument');
+        Schema::dropIfExists('instruments');
     }
 };
