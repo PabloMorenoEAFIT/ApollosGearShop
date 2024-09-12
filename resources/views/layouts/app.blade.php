@@ -41,6 +41,16 @@
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                     <button class="btn btn-outline-success" type="submit">Search</button>
                 </form>
+                <div class="vr bg-white mx-2 d-none d-lg-block"></div>
+                @guest
+                    <a class="nav-link active px-2" href="{{ route('login') }}">Login</a>
+                    <a class="nav-link active" href="{{ route('register') }}">Register</a>
+                @else
+                    <form id="logout" action="{{ route('logout') }}" method="POST">
+                        <a role="button" class="nav-link active px-2" onclick="document.getElementById('logout').submit();">Logout</a>
+                    @csrf
+                    </form>
+                @endguest
             </div>
         </div>
     </nav>

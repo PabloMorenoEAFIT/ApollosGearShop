@@ -9,3 +9,5 @@ Route::post('/instrument/save', 'App\Http\Controllers\InstrumentController@save'
 Route::get('/instrument/success', 'App\Http\Controllers\InstrumentController@success')->name('instrument.success');
 route::delete('/instrument/{id}', 'App\Http\Controllers\InstrumentController@delete')->name('instruments.delete');
 Route::get('/instrument/{id}', 'App\Http\Controllers\InstrumentController@show')->name('instrument.show');
+
+Auth::routes();
