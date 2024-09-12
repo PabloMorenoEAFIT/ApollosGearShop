@@ -1,12 +1,13 @@
 @extends('layouts.app')
-@section('title', $viewData["title"])
 
+@section('title', $viewData["title"])
 @section('subtitle', $viewData["subtitle"])
+
 @section('content')
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
-            <img src="{{ $viewData['instrument']->getImage() }}" class="img-fluid rounded-start" alt="Instrument Image">
+            <img src="{{ $viewData['instrument']->getImage() }}" class="card-img-top img-card" alt="{{ __('attributes.instrument_image') }}">
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -16,41 +17,37 @@
                 <table class="table table-striped table-bordered">
                     <tbody>
                         <tr>
-                            <th scope="row">ID</th>
+                            <th scope="row">{{ __('attributes.id') }}</th>
                             <td>{{ $viewData['instrument']->getId() }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Description</th>
+                            <th scope="row">{{ __('attributes.description') }}</th>
                             <td>{{ $viewData['instrument']->getDescription() }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Category</th>
-                            <td>{{ $viewData['instrument']->getCategory() }}</td>
+                            <th scope="row">{{ __('attributes.category') }}</th>
+                            <td>{{ $viewData['category'] }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Brand</th>
+                            <th scope="row">{{ __('attributes.brand') }}</th>
                             <td>{{ $viewData['instrument']->getBrand() }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Price</th>
+                            <th scope="row">{{ __('attributes.price') }}</th>
                             <td>
-                                @if ($viewData['instrument']->getPrice() > 100)
-                                    <span class="text-danger">${{ number_format($viewData['instrument']->getPrice(), 2) }}</span>
-                                @else
-                                    ${{ number_format($viewData['instrument']->getPrice(), 2) }}
-                                @endif
+                                <span class="text-success">{{ $viewData['instrument']->getFormattedPrice() }}</span>
                             </td>
                         </tr>
                         <tr>
-                            <th scope="row">Rating</th>
+                            <th scope="row">{{ __('attributes.rating') }}</th>
                             <td>{{ number_format($viewData['instrument']->getReviewSum(), 1) }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Number of Reviews</th>
+                            <th scope="row">{{ __('attributes.number_of_reviews') }}</th>
                             <td>{{ $viewData['instrument']->getNumberOfReviews() }}</td>
                         </tr>
                         <tr>
-                            <th scope="row">Available Quantity</th>
+                            <th scope="row">{{ __('attributes.available_quantity') }}</th>
                             <td>{{ $viewData['instrument']->getQuantity() }}</td>
                         </tr>
                     </tbody>
@@ -62,7 +59,7 @@
                 <form action="{{ route('instrument.delete', $viewData['instrument']->getId()) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete Instrument</button>
+                    <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
                 </form>
             </div>
         </div>

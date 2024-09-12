@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+
+
 class Instrument extends Model
 {
     use HasFactory;
@@ -37,17 +40,21 @@ class Instrument extends Model
      * $this->attributes['created_at'] - string - contains the creation timestamp of the instrument record
      *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the instrument record
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
-     * 
      */
+
+    
     protected $table = 'instruments';
 
     protected $guarded = [];
+
+    /* ---- RELATIONSHIPS ----*/
+
+    public function stocks(): HasMany
+    {
+        return $this->hasMany(Stock::class, 'instrument_id');
+    }
+
+    /* ---- GETTERS & SETTERS ----*/
 
     public function getId(): int
     {
@@ -111,7 +118,7 @@ class Instrument extends Model
 
     public function setReviewSum(float $review): void
     {
-        $this->attributes['reviewSum'] += $review;
+        $this->attributes['reviewSum'] += $review/$this->attributes['numberOfReviews'];
     }
 
     public function getNumberOfReviews(): int
@@ -126,12 +133,8 @@ class Instrument extends Model
 
     public function getQuantity(): int
     {
-        return $this->attributes['quantity'];
-    }
+        return $this->stocks()->latest('created_at')->value('quantity') ?? 0;
 
-    public function setQuantity(int $quantity): void
-    {
-        $this->attributes['quantity'] = $quantity;
     }
 
     public function getImage(): string
@@ -154,23 +157,58 @@ class Instrument extends Model
         return $this->attributes['updated_at'];
     }
 
-    /*CUSTOM METHODS */
+    /* ---- CUSTOM METHODS ----*/
 
-    public function searchByName(String $name): Instrument
+    public function getFormattedPrice(): string
     {
-        return $this->where('name', $name)->first();
+        return '$ ' . number_format($this->attributes['price'], 2);
     }
 
-    public function searchByCategory(string $category): Instrument
+    public function applySorting($query, $order)
     {
-        return $this->where('category', $category)->first();
+        switch ($order) {
+            case 'priceAsc':
+                $query->orderBy('price', 'asc');
+                break;
+            case 'priceDesc':
+                $query->orderBy('price', 'desc');
+                break;
+            case 'ratingAsc':
+                $query->orderBy('reviewSum', 'asc');
+                break;
+            case 'ratingDesc':
+                $query->orderBy('reviewSum', 'desc');
+                break;
+        }
+
+        return $query;
     }
 
-    public function searchByBrand(String $brand): Instrument
+    public function applyFilters($query, $filters)
     {
-        return $this->where('brand', $brand)->first();
+        if (!empty($filters['searchByName'])) {
+            $query->where('name', 'like', '%' . $filters['searchByName'] . '%');
+        }
+
+        if (!empty($filters['category'])) {
+            $query->where('category', $filters['category']);
+        }
+
+        if (!empty($filters['rating'])) {
+            $query->where('reviewSum', '>=', $filters['rating']);
+        }
+
+        if (!empty($filters['filterOrder'])) {
+            $this->applySorting($query, $filters['filterOrder']);
+        }
+
+        return $query;
     }
 
+    public function scopeFilterInstruments($query, $filters)
+    {
+        return $this->applyFilters($query, $filters);
+    }
 
 
     public function validate(array $data)
@@ -180,15 +218,17 @@ class Instrument extends Model
             'description' => 'required|string',
             'category' => 'required|string',
             'brand' => 'required|string',
-            'price' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
             'reviewSum' => 'nullable|numeric',
             'numberOfReviews' => 'nullable|integer|min:0',
-            'quantity' => 'required|integer|min:1',
-            'image' => 'nullable|string',
+            'quantity' => 'nullable|integer|min:1',
+            'image' => 'file|image|max:10240', //Max 10MB
         ]);
 
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
     }
+
+  
 }

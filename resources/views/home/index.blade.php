@@ -1,7 +1,7 @@
 @extends('layouts.app')
-@section('title', 'Home Page - Online Store')
+@section('title', __('messages.title'))
 @section('content')
 <div class="welcome-msg text-center">
-    <h3>Welcome to Apollo's Gear Shop!!!</h3>
+    <h3>{{ __('messages.welcome') }}</h3>
 </div>
 @endsection
