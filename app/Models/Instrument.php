@@ -171,8 +171,6 @@ class Instrument extends Model
         return $this->where('brand', $brand)->first();
     }
 
-    
-    
 
 
     public function validate(array $data)

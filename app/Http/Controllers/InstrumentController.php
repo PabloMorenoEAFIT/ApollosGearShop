@@ -7,7 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-
+use Illuminate\Support\Str;
 class InstrumentController extends Controller
 {
     public function index(): View
@@ -28,7 +28,7 @@ class InstrumentController extends Controller
         $viewData = [];
         $instrument = Instrument::findOrfail($id);
         $viewData['title'] = $instrument['name'].' - AGS';
-        $viewData['subtitle'] = $instrument['name'].' - instrument information';
+        $viewData['subtitle'] = Str::limit($instrument['name'].' - instrument information', 50);
         $viewData['instrument'] = $instrument;
 
         return view('instrument.show')->with('viewData', $viewData);
