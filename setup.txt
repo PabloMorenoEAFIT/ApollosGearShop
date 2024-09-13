@@ -18,7 +18,7 @@ To successfully run this project follow these steps:
         DB_USERNAME=<username> (usually root)
         DB_PASSWORD=<password>
 
-3 ---> Create a table "instrument" in PhpMyAdmin, with atributes:
+3 ---> Create a table "instruments" in PhpMyAdmin, with atributes:
     - id: int (PRIMARY_KEY, AUTO_INCREMENT)
     - name: string (varchar 150)
     - price: int
