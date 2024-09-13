@@ -15,3 +15,5 @@ Route::get('/stocks/{id}', 'App\Http\Controllers\StockController@show')->name('s
 Route::post('/stocks/{id}/add', 'App\Http\Controllers\StockController@addStock')->name('stock.add');
 Route::post('/stocks/{id}/lower','App\Http\Controllers\StockController@lowerStock')->name('stock.lower');
 Route::delete('/stocks/{id}/delete', 'App\Http\Controllers\StockController@delete')->name('stock.delete');
+
+Auth::routes();
