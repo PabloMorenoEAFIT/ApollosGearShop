@@ -7,6 +7,7 @@ use App\Models\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use \Illuminate\Contracts\Validation\Validator as ValidatorValidation;
 
 class RegisterController extends Controller
 {
@@ -46,7 +47,7 @@ class RegisterController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data): Validator
+    protected function validator(array $data): ValidatorValidation
     {
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
