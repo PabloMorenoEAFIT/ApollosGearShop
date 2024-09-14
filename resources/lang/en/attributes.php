@@ -52,5 +52,8 @@ return [
         'ratingAsc' => 'Rating: Low to High',
         'ratingDesc' => 'Rating: High to Low',
     ],
+    'reviews' => 'Reviews',
+    'no_reviews' => 'No reviews available for this product',
+    'score' => 'Score'
 ];
 

@@ -12,4 +12,5 @@ return [
     'insert_instrument' => 'Insertar Instrumento',
     'stock_entries' => 'Últimas Entradas de Existencias',
     'stock_details' => 'Detalles de la Entrada de Existencias',
+    'create_review' => 'Crear Reseña',
 ];  

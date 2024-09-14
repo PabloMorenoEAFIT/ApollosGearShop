@@ -16,4 +16,6 @@ return [
     'delete_instrument' => 'Delete Instrument',
     'created' => 'Created successfully!',
     'deleted' => 'Deleted successfully!',
+    'add_review' => 'Add Review',
+    'save' => 'Save',
 ];
