@@ -73,7 +73,7 @@
                             <label for="image" class="form-label">{{ __('attributes.image') }}</label>
                             <input type="file" id="image" class="form-control" name="image" />
                         </div>
-                        <input type="submit" class="btn btn-primary" value="{{ __('Save') }}" />
+                        <input type="submit" class="btn btn-primary" value="{{ __('messages.save') }}" />
                     </form>
                 </div>
             </div>

@@ -16,4 +16,6 @@ return [
     'delete_instrument' => 'Eliminar Instrumento',
     'created' => '¡Creado exitosamente!',
     'deleted' => '¡Eliminado exitosamente!',
+    'add_review' => 'Agregar Reseña',
+    'save' => 'Guardar',
 ];
