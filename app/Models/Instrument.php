@@ -219,7 +219,7 @@ class Instrument extends Model
     }
 
 
-    public function validate(array $data)
+    public function validate(array $data) 
     {
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',

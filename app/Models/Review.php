@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 
 class Review extends Model
@@ -28,15 +30,8 @@ class Review extends Model
 
     protected $table = 'reviews';
     
-    protected $fillable = ['score', 'description'];
+    protected $fillable = ['score', 'description', 'user_id', 'instrument_id'];
 
-    // public function validate(Request $request): void
-    // {
-    //     $request->validate([
-    //         'score' => 'required',
-    //         'description' => 'required',
-    //     ]);
-    // }
     // Relationships
     public function user(): BelongsTo
     {
@@ -94,4 +89,25 @@ class Review extends Model
         $this->attributes['instrument_id'] = $instrument_id;
     }
 
+
+    public function getCreatedAt(): string
+    {
+        return $this->attributes['created_at'];
+    }
+
+    public function getUpdatedAt(): string
+    {
+        return $this->attributes['updated_at'];
+    }
+
+    public function validate(Array $data): array
+    {
+
+        $validator = Validator::make($data, [
+            'description' => 'required|max:255',
+            'score' => 'required|integer|min:1|max:5',
+        ]);
+
+        return $validator->validated(); 
+    }
 }
