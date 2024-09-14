@@ -33,7 +33,12 @@
                         </div>
                         <div class="form-group mb-3">
                             <label for="score">Score:</label>
-                            <input type="number" name="score" id="score" class="form-control" required>
+                            <select name="score" id="score">
+                                @for($i = 1; $i <= 5; $i++)
+                                    <option value="{{ $i }}">{{ $i }}</option>
+                                @endfor
+                            </select>
+                            {{--<input type="number" name="score" id="score" class="form-control" required>--}}
                         </div>
                         <input type="submit" class="btn btn-primary" value="{{ __('messages.save') }}" />
                     </form>

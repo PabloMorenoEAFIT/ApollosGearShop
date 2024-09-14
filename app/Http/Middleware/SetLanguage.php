@@ -13,7 +13,7 @@ class SetLanguage
     {
  
 
-        $locale = $request->session()->get('locale', 'es');
+        $locale = $request->session()->get('locale', 'en');
 
         App::setLocale($locale);
 
