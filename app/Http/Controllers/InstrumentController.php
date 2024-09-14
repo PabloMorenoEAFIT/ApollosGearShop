@@ -53,12 +53,13 @@ class InstrumentController extends Controller
     {
         $viewData = [];
         $instrument = Instrument::findOrfail($id);
-
+        $instrument = Instrument::with('reviews.user')->findOrFail($id);
         $viewData = [
             'title' => $instrument['name'] . ' - AGS',
             'subtitle' => Str::limit($instrument['name'] . ' - instrument information', 50),
             'instrument' => $instrument,
             'category' => __('attributes.categories.' . $instrument->getCategory()),
+            'reviews' => $instrument->reviews,
         ];
 
         return view('instrument.show')->with('viewData', $viewData);

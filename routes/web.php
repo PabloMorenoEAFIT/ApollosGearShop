@@ -16,4 +16,7 @@ Route::post('/stocks/{id}/add', 'App\Http\Controllers\StockController@addStock')
 Route::post('/stocks/{id}/lower','App\Http\Controllers\StockController@lowerStock')->name('stock.lower');
 Route::delete('/stocks/{id}/delete', 'App\Http\Controllers\StockController@delete')->name('stock.delete');
 
+Route::get('/instruments/{id}/create-reviews', 'App\Http\Controllers\ReviewController@create')->name('review.create');
+Route::post('/instruments/{id}/save-reviews', 'App\Http\Controllers\ReviewController@save')->name('review.save');
+
 Auth::routes();

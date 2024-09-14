@@ -52,4 +52,6 @@ return [
         'ratingAsc' => 'Calificación: de menor a mayor',
         'ratingDesc' => 'Calificación: de mayor a menor',
     ],
+    'reviews' => 'Reseñas',
+    'no_reviews' => 'No hay reseñas disponibles para este producto',
 ];

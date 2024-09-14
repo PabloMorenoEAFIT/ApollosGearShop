@@ -53,6 +53,10 @@ class Instrument extends Model
     {
         return $this->hasMany(Stock::class, 'instrument_id');
     }
+    public function reviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'instrument_id');
+    }
 
     /* ---- GETTERS & SETTERS ----*/
 

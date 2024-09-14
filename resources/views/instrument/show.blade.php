@@ -52,6 +52,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <!-- Show instrument reviews -->
+                @include('review.show', ['viewData' => $viewData])
+                
             </div>
 
             <!-- Card Footer with Delete Button -->

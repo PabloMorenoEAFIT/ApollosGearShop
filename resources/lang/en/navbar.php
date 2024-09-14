@@ -12,4 +12,5 @@ return [
     'insert_instrument' => 'Insert Instrument',
     'stock_entries' => 'Latest Stock Entries',
     'stock_details' => 'Details of Stock Entry',
+    'create_review' => 'Create Review',
 ];
