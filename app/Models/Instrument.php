@@ -172,7 +172,7 @@ class Instrument extends Model
         return '$ ' . number_format($this->attributes['price'], 2);
     }
 
-    public function applySorting($query, $order)
+    public function applySorting($query, $order) : object
     {
         switch ($order) {
             case 'priceAsc':
@@ -192,7 +192,7 @@ class Instrument extends Model
         return $query;
     }
 
-    public function applyFilters($query, $filters)
+    public function applyFilters($query, array $filters): object
     {
         if (!empty($filters['searchByName'])) {
             $query->where('name', 'like', '%' . $filters['searchByName'] . '%');
@@ -213,13 +213,13 @@ class Instrument extends Model
         return $query;
     }
 
-    public function scopeFilterInstruments($query, $filters)
+    public function scopeFilterInstruments($query, array $filters) : object
     {
         return $this->applyFilters($query, $filters);
     }
 
 
-    public function validate(array $data) 
+    public function validate(array $data) : array
     {
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
@@ -236,6 +236,8 @@ class Instrument extends Model
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
+
+        return $validator->validated(); 
     }
 
   
