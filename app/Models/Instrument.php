@@ -112,13 +112,17 @@ class Instrument extends Model
     }
 
     public function getReviewSum(): float
-    {
-        return $this->attributes['reviewSum'];
+    {   
+        if ($this->attributes['numberOfReviews'] == 0) {
+            return $this->attributes['reviewSum'];
+        }
+
+        return $this->attributes['reviewSum']/ $this->attributes['numberOfReviews'];
     }
 
     public function setReviewSum(float $review): void
     {
-        $this->attributes['reviewSum'] += $review/$this->attributes['numberOfReviews'];
+        $this->attributes['reviewSum'] += $review;
     }
 
     public function getNumberOfReviews(): int
