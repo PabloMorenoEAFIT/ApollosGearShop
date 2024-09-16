@@ -19,6 +19,6 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
 
         Instrument::factory(8)->create();
-        Stock::factory(8)->create();
+        //Stock::factory(8)->create();
     }
 }
