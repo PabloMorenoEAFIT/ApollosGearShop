@@ -1,0 +1,39 @@
+To successfully run this project follow these steps: 
+
+1 ---> Install required dependencies running:
+    - ´npm install´
+    - ´composer require laravel/pint --dev´
+
+2 ---> Set up backend:
+    - If using Xampp, start Apache and MySQL services. Open admin console from the last one, or open "http://localhost/phpmyadmin/" in your choosen browser
+
+    -When PhpMyAdmin opens, create a mysql database called "ags", 
+
+3 ---> Setup your database permissions in .env to:
+    
+        DB_CONNECTION=mysql
+        DB_HOST=127.0.0.1
+        DB_PORT=3306
+        DB_DATABASE=ags
+        DB_USERNAME=<username> (usually root)
+        DB_PASSWORD=<password>
+
+3 ---> Create a table "instruments" in PhpMyAdmin, with atributes:
+    - id: int (PRIMARY_KEY, AUTO_INCREMENT)
+    - name: string (varchar 150)
+    - price: int
+
+4 ---> Run migrations:
+    - Run ´php artisan migrate´
+    *** If error "Base table or view already exists" shows up, delete "instrument" table and re-run migrations
+
+5 --> Set up demo data:
+    - Run ´php artisan db:seed´ to set demo instruments
+
+
+Additionally:
+    - Run ´npm run build´ whenever you make changes in the .js or .css files, and re-run server with ´php artisan serve´
+
+
+Finally, remember to: 
+    - Format the code using ´./vendor/bin/pint´ (You must be in root folder)

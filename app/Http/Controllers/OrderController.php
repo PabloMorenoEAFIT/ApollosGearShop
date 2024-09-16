@@ -3,18 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Order; // importar Request
+use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request; // Importa el modelo Leccion
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class OrderController extends Controller
 {
+    protected ImageService $imageService;
+
     public function index(): view
     {
-        $viewData = [];
-        $viewData['title'] = 'Order - Online Store';
-        $viewData['subtitle'] = 'List of Orders';
-        $viewData['Orders'] = Order::all();
+        $viewData = [
+            'title' => 'Order - Online Store',
+            'subtitle' => __('navbar.list_orders'),
+            'Orders' => Order::all(),
+        ];
 
         return view('order.index')->with('viewData', $viewData);
 

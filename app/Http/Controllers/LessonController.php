@@ -3,26 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lesson; // importar Request
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request; // Importa el modelo Leccion
+use App\Services\ImageService;
+use Illuminate\Http\RedirectResponse; // Importa el modelo Leccion
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
 
 class LessonController extends Controller
 {
-    public function index(): View
+    protected ImageService $imageService;
+
+    public function __construct(ImageService $imageService)
     {
-        $viewData = [];
-        $viewData['title'] = 'Lesson - Online Store';
-        $viewData['subtitle'] = 'List of Lessons';
-        $viewData['Lessons'] = Lesson::all();
+        $this->imageService = $imageService;
+    }
+
+    public function index(Request $request): View
+    {
+        $viewData = [
+            'title' => __('messages.list_lessons'),
+            'subtitle' => __('navbar.list_lessons'),
+            'message' => Session::get('message'),
+            'Lessons' => Lesson::all(),
+        ];
+        // $viewData['title'] = 'Lesson - Online Store';
+        // $viewData['subtitle'] = 'List of Lessons';
+        // $viewData['Lessons'] = Lesson::all();
 
         return view('lesson.index')->with('viewData', $viewData);
     }
 
-    public function show(string $id): View|RedirectResponse
+    public function show(string $id, Request $request): View|RedirectResponse
     {
         $viewData = [];
         $lesson = Lesson::findOrFail($id);
+
+        if ($request->isMethod('post') && $request->has('add_to_cart')) {
+            // Agregar la leccion al carrito
+            $cartItems = $request->session()->get('cart_items', []);
+            $cartItems[] = ['id' => $id, 'type' => 'lesson'];
+            $request->session()->put('cart_items', $cartItems);
+
+            return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
+        }
+
         $viewData['title'] = $lesson['name'].' - AGS';
         $viewData['subtitle'] = $lesson['name'].' - lesson information';
         $viewData['lesson'] = $lesson;
@@ -65,6 +89,19 @@ class LessonController extends Controller
             'price' => $lesson->price,
             'teacher' => $lesson->teacher,
         ]);
+    }
+
+    public function addToCart(string $id, Request $request): RedirectResponse
+    {
+        // Verifica si el instrumento existe
+        $lesson = Lesson::findOrFail($id);
+
+        // Agregar el instrumento al carrito
+        $cartItems = $request->session()->get('cart_items', []);
+        $cartItems[] = ['id' => $id, 'type' => 'lesson'];
+        $request->session()->put('cart_items', $cartItems);
+
+        return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
     }
 
     public function success(Request $request): View|RedirectResponse

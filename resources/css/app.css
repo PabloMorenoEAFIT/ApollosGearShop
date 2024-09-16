@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&display=swap');
+
+
+html, body{
+    border: 0;
+    box-sizing: border-box;
+    font-family: 'Oswald', sans-serif;
+}
+
+.welcome-msg{
+    display: grid;
+    place-items: center;
+    height: 53vh;
+}
+
+.create-instrument-container{
+    margin-bottom: 21vh;
+}
+
