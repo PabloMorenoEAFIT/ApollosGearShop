@@ -4,138 +4,129 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Lesson extends Model
 {
     use HasFactory;
 
-    /**
-     * INSTRUMENT ATTRIBUTES
-
-     * $this->attributes['id'] - int - contains the instrument primary key (id)
-
-     * $this->attributes['name'] - string - contains the instrument name
-
-     * $this->attributes['price'] - int - contains the instrument price
-     *
-     * Completar con el resto de atributos
-     */
     protected $table = 'lessons';
 
-    protected $fillable = ['name', 'description', 'difficulty', 'schedule', 'totalHours', 'location', 'price', 'teacher'];
+    protected $fillable = [
+        'name', 'description', 'difficulty', 'schedule', 'totalHours',
+        'location', 'price', 'teacher',
+    ];
 
-    //  ID
+    // Validaciones movidas al modelo
+    public function validate(array $data): array
+    {
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'difficulty' => 'required|string',
+            'schedule' => 'required|string',
+            'totalHours' => 'required|numeric|gt:0',
+            'location' => 'required|string',
+            'price' => 'required|numeric|gt:0',
+            'teacher' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
+    }
+
+    // Getters y setters
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
-    public function setId($id): void
-    {
-        $this->attributes['id'] = $id;
-    }
-
-    // name
     public function getName(): string
     {
-
         return $this->attributes['name'];
     }
 
-    public function setName($name): void
+    public function setName(string $name): void
     {
-
         $this->attributes['name'] = $name;
     }
 
-    // description
     public function getDescription(): string
     {
-
         return $this->attributes['description'];
     }
 
-    public function setDescription($description): void
+    public function setDescription(string $description): void
     {
-
         $this->attributes['description'] = $description;
     }
 
-    // difficulty
     public function getDifficulty(): string
     {
-
         return $this->attributes['difficulty'];
     }
 
-    public function setDifficulty($difficulty): void
+    public function setDifficulty(string $difficulty): void
     {
-
         $this->attributes['difficulty'] = $difficulty;
     }
 
-    // schedule
     public function getSchedule(): string
     {
-
         return $this->attributes['schedule'];
     }
 
-    public function setSchedule($schedule): void
+    public function setSchedule(string $schedule): void
     {
-
         $this->attributes['schedule'] = $schedule;
     }
 
-    // totalHours - int
     public function getTotalHours(): int
     {
-
         return $this->attributes['totalHours'];
     }
 
-    public function setTotalHours($totalHours): void
+    public function setTotalHours(int $totalHours): void
     {
-
         $this->attributes['totalHours'] = $totalHours;
     }
 
-    // location
     public function getLocation(): string
     {
-
         return $this->attributes['location'];
     }
 
-    public function setLocation($location): void
+    public function setLocation(string $location): void
     {
-
         $this->attributes['location'] = $location;
     }
 
-    // price - int
     public function getPrice(): int
     {
-
         return $this->attributes['price'];
     }
 
-    public function setPrice($price): void
+    public function getFormattedPrice(): string
     {
+        return '$ '.number_format($this->getPrice(), 2);
+    }
 
+    public function setPrice(int $price): void
+    {
         $this->attributes['price'] = $price;
     }
 
-    // teacher
     public function getTeacher(): string
     {
-
         return $this->attributes['teacher'];
     }
 
-    public function setTeacher($teacher): void
+    public function setTeacher(string $teacher): void
     {
-
         $this->attributes['teacher'] = $teacher;
     }
 }

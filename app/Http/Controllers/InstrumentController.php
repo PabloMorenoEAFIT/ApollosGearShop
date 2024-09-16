@@ -54,7 +54,6 @@ class InstrumentController extends Controller
         $instrument = Instrument::with('reviews.user')->findOrFail($id);
 
         if ($request->isMethod('post') && $request->has('add_to_cart')) {
-            // Agregar el instrumento al carrito
             $cartItems = $request->session()->get('cart_items', []);
             $cartItems[] = ['id' => $id, 'type' => 'instrument', 'quantity' => 'quantity'];
             $request->session()->put('cart_items', $cartItems);
@@ -75,18 +74,14 @@ class InstrumentController extends Controller
 
     public function addToCart(Request $request, string $id): RedirectResponse
     {
-        // Verifica si el instrumento existe
         $instrument = Instrument::findOrFail($id);
 
-        // Obtiene la cantidad del formulario
-        $quantity = $request->input('quantity', 1); // Por defecto es 1 si no se proporciona cantidad
+        $quantity = $request->input('quantity', 1);
 
-        // Verifica si la cantidad solicitada es menor o igual al stock disponible
         if ($quantity > $instrument->getQuantity()) {
             return redirect()->back()->withErrors(['quantity' => 'The requested quantity exceeds the available stock.']);
         }
 
-        // Agregar el instrumento al carrito con la cantidad especificada
         $cartItems = $request->session()->get('cart_items', []);
         $cartItems[] = ['id' => $id, 'type' => 'instrument', 'quantity' => $quantity];
         $request->session()->put('cart_items', $cartItems);
