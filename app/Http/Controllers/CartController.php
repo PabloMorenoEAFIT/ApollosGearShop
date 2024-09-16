@@ -12,7 +12,6 @@ class CartController extends Controller
 {
     public function index(Request $request): View
     {
-        // Obtener los instrumentos y lecciones del carrito
         $cartItems = $request->session()->get('cart_items', []);
 
         $cartProducts = [];
@@ -20,12 +19,11 @@ class CartController extends Controller
             if ($item['type'] === 'instrument') {
                 $product = Instrument::find($item['id']);
                 if ($product) {
-                    // Obtener la cantidad en stock del producto
                     $stockQuantity = $product->getQuantity();
                     $cartProducts[] = [
                         'type' => 'Instrument',
                         'product' => $product,
-                        'quantity' => $item['quantity'], // Usa la cantidad almacenada en el carrito
+                        'quantity' => $item['quantity'],
                     ];
                 }
             } elseif ($item['type'] === 'lesson') {
@@ -49,12 +47,10 @@ class CartController extends Controller
 
     public function add(string $id, string $type, Request $request): RedirectResponse
     {
-        // Validar que el tipo sea válido
         if (! in_array($type, ['instrument', 'lesson'])) {
             return back()->withErrors('Invalid product type.');
         }
 
-        // Agregar el producto al carrito
         $cartItems = $request->session()->get('cart_items', []);
         $cartItems[] = ['id' => $id, 'type' => $type];
         $request->session()->put('cart_items', $cartItems);

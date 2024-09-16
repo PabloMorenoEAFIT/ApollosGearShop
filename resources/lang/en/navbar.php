@@ -3,7 +3,7 @@
 return [
     'search_placeholder' => 'Search by name',
     'search_button' => 'Search',
-    'subtitle' => 'Welcome to Our Website',
+    'subtitle' => 'Welcome to Apollo`s Gear Shop',
     'stock' => 'Stock',
     'stock_add' => 'Add Stock',
     'copyright' => 'Copyright',

@@ -24,46 +24,37 @@ class Order extends Model
 
     protected $fillable = ['creationDate', 'deliveryDate', 'totalPrice'];
 
-    //  ID
     public function getId(): int
     {
         return $this->attributes['id'];
     }
 
-    public function setId(): void
-    {
-        $this->attributes['id'] = $id;
-    }
-
-    // creationDate
     public function getCreationDate(): date
     {
         return $this->attributes['creationDate'];
     }
 
-    public function setCreationDate(): void
+    public function setCreationDate(date $creationDate): void
     {
         $this->attributes['creationDate'] = $creationDate;
     }
 
-    // deliveryDate
     public function getDeliveryDate(): date
     {
         return $this->attributes['deliveryDate'];
     }
 
-    public function setDeliveryDate(): void
+    public function setDeliveryDate(date $deliveryDate): void
     {
         $this->attributes['deliveryDate'] = $deliveryDate;
     }
 
-    // totalPrice
-    public function getTotalPrice(): date
+    public function getTotalPrice(): int
     {
         return $this->attributes['totalPrice'];
     }
 
-    public function setTotalPrice(): void
+    public function setTotalPrice(int $totalPrice): void
     {
         $this->attributes['totalPrice'] = $totalPrice;
     }

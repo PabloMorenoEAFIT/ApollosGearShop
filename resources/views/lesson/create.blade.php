@@ -16,12 +16,19 @@
                     @endif
                     <form action="{{ route('lesson.save') }}" method="POST">
                         @csrf
-                        <input type="text" class="form-control mb-2" placeholder="Enter name" name="name"
+                        <input type="text" class="form-control mb-2" placeholder="Enter the lesson name" name="name"
                             value="{{ old('name') }}" />
-                        <input type="text" class="form-control mb-2" placeholder="Enter description" name="description"
-                            value="{{ old('description') }}" />
-                        <input type="text" class="form-control mb-2" placeholder="Enter difficulty" name="difficulty"
-                            value="{{ old('difficulty') }}" />
+                        <textarea class="form-control mb-2" placeholder="Enter description" name="description"
+                            rows="4">{{ old('description') }}</textarea>
+                        <select class="form-control mb-2" name="difficulty">
+                            <option value="">{{ __('Select difficulty') }}</option>
+                            <option value="principiante" {{ old('difficulty') == 'principiante' ? 'selected' : '' }}>
+                                Principiante</option>
+                            <option value="intermedio" {{ old('difficulty') == 'intermedio' ? 'selected' : '' }}>
+                                Intermedio</option>
+                            <option value="avanzado" {{ old('difficulty') == 'avanzado' ? 'selected' : '' }}>Avanzado
+                            </option>
+                        </select>
                         <input type="text" class="form-control mb-2" placeholder="Enter schedule" name="schedule"
                             value="{{ old('schedule') }}" />
                         <input type="text" class="form-control mb-2" placeholder="Enter totalHours" name="totalHours"
@@ -38,6 +45,5 @@
             </div>
         </div>
     </div>
-</div>
 </div>
 @endsection

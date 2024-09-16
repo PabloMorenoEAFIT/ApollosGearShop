@@ -52,9 +52,10 @@
                         </tr>
                     </tbody>
                 </table>
+
                 <!-- Show instrument reviews -->
                 @include('review.show', ['viewData' => $viewData])
-                
+
             </div>
 
             <!-- Card Footer with Delete Button -->
@@ -66,22 +67,15 @@
                     <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
                 </form>
 
-                <!-- Add to Cart Form -->
-                <!-- Add to Cart Form -->
-            <form id="addToCartForm" action="{{ route('instrument.addToCart', ['id' => $viewData['instrument']->id]) }}" method="POST">
-                @csrf
-                <div class="mb-3">
-                    <label for="quantity" class="form-label">{{ __('attributes.quantity') }}</label>
-                    <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="{{ $viewData['instrument']->getQuantity() }}" value="1" required data-max-quantity="{{ $viewData['instrument']->getQuantity() }}">
-                </div>
-                <button type="submit" class="btn btn-primary">{{ __('messages.add_to_cart') }}</button>
-            </form>
+                <!-- Include Add to Cart Form -->
+                @include('cart.add', ['instrument' => $viewData['instrument']])
 
             </div>
         </div>
     </div>
 </div>
 @endsection
+
 @section('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {

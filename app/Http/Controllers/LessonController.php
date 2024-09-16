@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Lesson; // importar Request
+use App\Models\Lesson;
 use App\Services\ImageService;
-use Illuminate\Http\RedirectResponse; // Importa el modelo Leccion
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class LessonController extends Controller
@@ -26,9 +27,6 @@ class LessonController extends Controller
             'message' => Session::get('message'),
             'Lessons' => Lesson::all(),
         ];
-        // $viewData['title'] = 'Lesson - Online Store';
-        // $viewData['subtitle'] = 'List of Lessons';
-        // $viewData['Lessons'] = Lesson::all();
 
         return view('lesson.index')->with('viewData', $viewData);
     }
@@ -39,12 +37,11 @@ class LessonController extends Controller
         $lesson = Lesson::findOrFail($id);
 
         if ($request->isMethod('post') && $request->has('add_to_cart')) {
-            // Agregar la leccion al carrito
             $cartItems = $request->session()->get('cart_items', []);
             $cartItems[] = ['id' => $id, 'type' => 'lesson'];
             $request->session()->put('cart_items', $cartItems);
 
-            return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
+            return redirect()->route('cart.index')->with('message', 'Lesson added to cart!');
         }
 
         $viewData['title'] = $lesson['name'].' - AGS';
@@ -56,7 +53,7 @@ class LessonController extends Controller
 
     public function create(): View
     {
-        $viewData = []; //to be sent to the view
+        $viewData = [];
         $viewData['title'] = 'Create lesson';
 
         return view('lesson.create')->with('viewData', $viewData);
@@ -64,53 +61,48 @@ class LessonController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'difficulty' => 'required',
-            'schedule' => 'required',
-            'totalHours' => 'required|numeric|gt:0',
-            'location' => 'required',
-            'price' => 'required|numeric|gt:0',
-            'teacher' => 'required',
-        ]);
+        $lesson = new Lesson;
 
-        $lesson = Lesson::create($request->only(['name', 'description', 'difficulty',
-            'schedule', 'totalHours', 'location', 'price', 'teacher']));
+        try {
+            $validatedData = $lesson->validate($request->all());
 
-        return redirect()->route('lesson.success', [
-            'id' => $lesson->id,
-            'name' => $lesson->name,
-            'description' => $lesson->description,
-            'difficulty' => $lesson->difficulty,
-            'schedule' => $lesson->schedule,
-            'totalHours' => $lesson->totalHours,
-            'location' => $lesson->location,
-            'price' => $lesson->price,
-            'teacher' => $lesson->teacher,
-        ]);
+            $lesson = Lesson::create($validatedData);
+
+            return redirect()->route('lesson.success', [
+                'id' => $lesson->id,
+                'name' => $lesson->name,
+                'description' => $lesson->description,
+                'difficulty' => $lesson->difficulty,
+                'schedule' => $lesson->schedule,
+                'totalHours' => $lesson->totalHours,
+                'location' => $lesson->location,
+                'price' => $lesson->price,
+                'teacher' => $lesson->teacher,
+            ]);
+        } catch (ValidationException $e) {
+            return redirect()->back()->withErrors($e->errors())->withInput();
+        }
     }
 
     public function addToCart(string $id, Request $request): RedirectResponse
     {
-        // Verifica si el instrumento existe
         $lesson = Lesson::findOrFail($id);
 
-        // Agregar el instrumento al carrito
         $cartItems = $request->session()->get('cart_items', []);
         $cartItems[] = ['id' => $id, 'type' => 'lesson'];
         $request->session()->put('cart_items', $cartItems);
 
-        return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
+        return redirect()->route('cart.index')->with('message', 'Lesson added to cart!');
     }
 
     public function success(Request $request): View|RedirectResponse
     {
-        $lesson = $request->only(['id', 'name', 'description', 'difficulty', 'schedule', 'totalHours', 'location', 'price', 'teacher']);
+        $lesson = $request->only([
+            'id', 'name', 'description', 'difficulty',
+            'schedule', 'totalHours', 'location', 'price', 'teacher',
+        ]);
 
         if (empty($lesson['id']) || empty($lesson['name']) || empty($lesson['description'])) {
-            Log::info('lesson details missing in query parameters.');
-
             return redirect()->route('home.index');
         }
 
