@@ -1,29 +1,28 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\Review;
 use App\Models\Instrument;
-use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\View\View;   
+use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\View\View;
 
 class ReviewController extends Controller
 {
     public function save(Request $request, int $id): RedirectResponse
     {
-        if (!Auth::check()) {
+        if (! Auth::check()) {
             return redirect()->route('login')->with('error', 'You must be logged in to submit a review.');
         }
 
         $instrument = Instrument::findOrFail($id);
-        
-        $review = new Review();
+
+        $review = new Review;
         $validatedData = $review->validate($request->all());
         $userId = auth()->user()->id;
-        
+
         try {
             $review = Review::create([
                 'instrument_id' => $instrument->getId(),
@@ -37,17 +36,17 @@ class ReviewController extends Controller
             $instrument->save();
         } catch (\Exception $e) {
             return redirect()->route('instrument.show', ['id' => $instrument->getId()])
-                            ->with('error', 'An error occurred while saving the review.');
+                ->with('error', 'An error occurred while saving the review.');
         }
 
         return redirect()->route('instrument.show', ['id' => $instrument->getId()])
-                        ->with('success', 'Review added successfully!');
+            ->with('success', 'Review added successfully!');
     }
 
     public function create(int $id): View
     {
         $instrument = Instrument::findOrFail($id);
-    
+
         $viewData = [
             'title' => __('navbar.create_review'),
             'subtitle' => __('navbar.create_review'),
@@ -56,7 +55,6 @@ class ReviewController extends Controller
 
         return view('review.create')->with('viewData', $viewData);
     }
-
 
     /**
      * Delete a review.

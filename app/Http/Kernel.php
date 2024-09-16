@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -23,11 +24,11 @@ class Kernel extends HttpKernel
      */
     protected $middlewareGroups = [
         'web' => [
-            \App\Http\Middleware\SetLanguage::class, 
+            \App\Http\Middleware\SetLanguage::class,
         ],
 
         'api' => [
-            
+
         ],
     ];
 
@@ -39,6 +40,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'set.language' => \App\Http\Middleware\SetLanguage::class, 
+        'set.language' => \App\Http\Middleware\SetLanguage::class,
     ];
 }

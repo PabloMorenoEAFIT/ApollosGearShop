@@ -23,7 +23,6 @@
     <title>@yield('title', 'AGS')</title>
 </head>
 
-
 <body>
     <!-- header -->
 
@@ -48,6 +47,18 @@
 
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('stock.index') }}">{{ __('navbar.stock') }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('lesson.index') }}">{{ __('navbar.list_lessons') }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('order.index') }}">{{ __('navbar.list_orders') }}</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('cart.index') }}">{{ __('navbar.cart') }}</a>
                     </li>
 
                 </ul>

@@ -4,11 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
-
-use Illuminate\Database\Eloquent\Relations\HasMany;
-
 
 class Instrument extends Model
 {
@@ -41,8 +39,6 @@ class Instrument extends Model
      *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the instrument record
      */
-
-    
     protected $table = 'instruments';
 
     protected $guarded = [];
@@ -53,6 +49,7 @@ class Instrument extends Model
     {
         return $this->hasMany(Stock::class, 'instrument_id');
     }
+
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'instrument_id');
@@ -116,12 +113,12 @@ class Instrument extends Model
     }
 
     public function getReviewSum(): float
-    {   
+    {
         if ($this->attributes['numberOfReviews'] == 0) {
             return $this->attributes['reviewSum'];
         }
 
-        return $this->attributes['reviewSum']/ $this->attributes['numberOfReviews'];
+        return $this->attributes['reviewSum'] / $this->attributes['numberOfReviews'];
     }
 
     public function setReviewSum(float $review): void
@@ -169,10 +166,10 @@ class Instrument extends Model
 
     public function getFormattedPrice(): string
     {
-        return '$ ' . number_format($this->attributes['price'], 2);
+        return '$ '.number_format($this->attributes['price'], 2);
     }
 
-    public function applySorting($query, $order) : object
+    public function applySorting($query, $order): object
     {
         switch ($order) {
             case 'priceAsc':
@@ -194,32 +191,31 @@ class Instrument extends Model
 
     public function applyFilters($query, array $filters): object
     {
-        if (!empty($filters['searchByName'])) {
-            $query->where('name', 'like', '%' . $filters['searchByName'] . '%');
+        if (! empty($filters['searchByName'])) {
+            $query->where('name', 'like', '%'.$filters['searchByName'].'%');
         }
 
-        if (!empty($filters['category'])) {
+        if (! empty($filters['category'])) {
             $query->where('category', $filters['category']);
         }
 
-        if (!empty($filters['rating'])) {
+        if (! empty($filters['rating'])) {
             $query->where('reviewSum', '>=', $filters['rating']);
         }
 
-        if (!empty($filters['filterOrder'])) {
+        if (! empty($filters['filterOrder'])) {
             $this->applySorting($query, $filters['filterOrder']);
         }
 
         return $query;
     }
 
-    public function scopeFilterInstruments($query, array $filters) : object
+    public function scopeFilterInstruments($query, array $filters): object
     {
         return $this->applyFilters($query, $filters);
     }
 
-
-    public function validate(array $data) : array
+    public function validate(array $data): array
     {
         $validator = Validator::make($data, [
             'name' => 'required|string|max:255',
@@ -237,8 +233,6 @@ class Instrument extends Model
             throw new ValidationException($validator);
         }
 
-        return $validator->validated(); 
+        return $validator->validated();
     }
-
-  
 }

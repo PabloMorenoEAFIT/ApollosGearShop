@@ -2,13 +2,12 @@
 
 namespace App\Models;
 
-use InvalidArgumentException;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Validation\ValidationException;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
+use InvalidArgumentException;
 
 class Stock extends Model
 {
@@ -30,8 +29,6 @@ class Stock extends Model
      * $this->attributes['created_at'] - string - contains the creation timestamp of the stock record
      *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the stock record
-     *  
-     * 
      */
     protected $table = 'stock';
 
@@ -103,13 +100,13 @@ class Stock extends Model
 
     /* ---- CUSTOM METHODS ----*/
 
-    public function addStock(int $quantity, string $type = "Add", ?string $comments = null): void
+    public function addStock(int $quantity, string $type = 'Add', ?string $comments = null): void
     {
         $latestStock = Stock::where('instrument_id', $this->attributes['instrument_id'])
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $newQuantity = $latestStock->attributes['quantity'] + $quantity; 
+        $newQuantity = $latestStock->attributes['quantity'] + $quantity;
 
         Stock::create([
             'quantity' => $newQuantity,
@@ -118,8 +115,8 @@ class Stock extends Model
             'instrument_id' => $this->attributes['instrument_id'],
         ]);
     }
-    
-    public function lowerStock(int $quantity, string $type = "Lower", ?string $comments = null): void
+
+    public function lowerStock(int $quantity, string $type = 'Lower', ?string $comments = null): void
     {
         // Ensure the quantity does not become negative
         if ($this->attributes['quantity'] < $quantity) {
@@ -127,11 +124,10 @@ class Stock extends Model
         }
 
         $latestStock = Stock::where('instrument_id', $this->attributes['instrument_id'])
-                        ->orderBy('created_at', 'desc')
-                        ->first();
+            ->orderBy('created_at', 'desc')
+            ->first();
 
-        $newQuantity = $latestStock->attributes['quantity'] - $quantity; 
-
+        $newQuantity = $latestStock->attributes['quantity'] - $quantity;
 
         Stock::create([
             'quantity' => $newQuantity,
@@ -141,18 +137,17 @@ class Stock extends Model
         ]);
     }
 
-    public  function getLatestStocks() : object
+    public function getLatestStocks(): object
     {
         return self::select('s1.*')
-        ->from(DB::raw('(SELECT * FROM stock s1
+            ->from(DB::raw('(SELECT * FROM stock s1
                          WHERE s1.created_at = (SELECT MAX(s2.created_at)
                                                  FROM stock s2
                                                  WHERE s2.instrument_id = s1.instrument_id)
                         ) as s1'))
-        ->orderBy('s1.created_at', 'desc')
-        ->get();
+            ->orderBy('s1.created_at', 'desc')
+            ->get();
     }
-
 
     public function validate(array $data)
     {

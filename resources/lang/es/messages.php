@@ -18,4 +18,5 @@ return [
     'deleted' => '¡Eliminado exitosamente!',
     'add_review' => 'Agregar Reseña',
     'save' => 'Guardar',
+    'add_to_cart' => 'Añadir al carrito',
 ];

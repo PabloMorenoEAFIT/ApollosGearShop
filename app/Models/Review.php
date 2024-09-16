@@ -4,9 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
-
 
 class Review extends Model
 {
@@ -27,9 +25,8 @@ class Review extends Model
      *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the review record
      */
-
     protected $table = 'reviews';
-    
+
     protected $fillable = ['score', 'description', 'user_id', 'instrument_id'];
 
     // Relationships
@@ -37,11 +34,11 @@ class Review extends Model
     {
         return $this->belongsTo(User::class);
     }
+
     public function instrument(): BelongsTo
     {
         return $this->belongsTo(Instrument::class);
     }
-
 
     // Getters & Setters
     public function getId(): int
@@ -89,7 +86,6 @@ class Review extends Model
         $this->attributes['instrument_id'] = $instrument_id;
     }
 
-
     public function getCreatedAt(): string
     {
         return $this->attributes['created_at'];
@@ -100,7 +96,7 @@ class Review extends Model
         return $this->attributes['updated_at'];
     }
 
-    public function validate(Array $data): array
+    public function validate(array $data): array
     {
 
         $validator = Validator::make($data, [
@@ -108,6 +104,6 @@ class Review extends Model
             'score' => 'required|integer|min:1|max:5',
         ]);
 
-        return $validator->validated(); 
+        return $validator->validated();
     }
 }

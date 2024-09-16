@@ -59,13 +59,44 @@
 
             <!-- Card Footer with Delete Button -->
             <div class="card-footer text-muted text-center">
+                <!-- Delete Form -->
                 <form action="{{ route('instrument.delete', $viewData['instrument']->getId()) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
                 </form>
+
+                <!-- Add to Cart Form -->
+                <!-- Add to Cart Form -->
+            <form id="addToCartForm" action="{{ route('instrument.addToCart', ['id' => $viewData['instrument']->id]) }}" method="POST">
+                @csrf
+                <div class="mb-3">
+                    <label for="quantity" class="form-label">{{ __('attributes.quantity') }}</label>
+                    <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="{{ $viewData['instrument']->getQuantity() }}" value="1" required data-max-quantity="{{ $viewData['instrument']->getQuantity() }}">
+                </div>
+                <button type="submit" class="btn btn-primary">{{ __('messages.add_to_cart') }}</button>
+            </form>
+
             </div>
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('addToCartForm');
+    const quantityInput = document.getElementById('quantity');
+    
+    form.addEventListener('submit', function(event) {
+        const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
+        const quantity = parseInt(quantityInput.value);
+
+        if (quantity > maxQuantity) {
+            event.preventDefault(); // Evita el envío del formulario
+            alert('{{ __('validation.custom.quantity_greater_than_available') }}');
+        }
+    });
+});
+</script>
 @endsection

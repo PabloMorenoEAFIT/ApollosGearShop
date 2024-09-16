@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\View\View;
 use App\Models\Instrument;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Illuminate\View\View;
 
 class InstrumentController extends Controller
 {
-
     protected ImageService $imageService;
 
     public function __construct(ImageService $imageService)
@@ -27,16 +26,16 @@ class InstrumentController extends Controller
             'searchByName' => $request->input('searchByName'),
             'category' => $request->input('category'),
             'rating' => $request->input('rating'),
-            'filterOrder' => $request->input('filterOrder')
+            'filterOrder' => $request->input('filterOrder'),
         ];
 
         $instruments = Instrument::filterInstruments($filters)->get();
         $allCategories = Instrument::pluck('category')->unique();
-    
+
         $categories = $allCategories->mapWithKeys(function ($category) {
-            return [$category => __('attributes.categories.' . $category)];
+            return [$category => __('attributes.categories.'.$category)];
         });
-    
+
         $viewData = [
             'title' => __('messages.instrument_list'),
             'subtitle' => __('navbar.list_instruments'),
@@ -44,31 +43,61 @@ class InstrumentController extends Controller
             'categories' => $categories,
             'instruments' => $instruments,
         ];
-    
+
         return view('instrument.index')->with('viewData', $viewData);
     }
-    
 
-    public function show(string $id): View|RedirectResponse
+    public function show(string $id, Request $request): View|RedirectResponse
     {
         $viewData = [];
-        $instrument = Instrument::findOrfail($id);
+        $instrument = Instrument::findOrFail($id);
         $instrument = Instrument::with('reviews.user')->findOrFail($id);
+
+        if ($request->isMethod('post') && $request->has('add_to_cart')) {
+            // Agregar el instrumento al carrito
+            $cartItems = $request->session()->get('cart_items', []);
+            $cartItems[] = ['id' => $id, 'type' => 'instrument', 'quantity' => 'quantity'];
+            $request->session()->put('cart_items', $cartItems);
+
+            return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
+        }
+
         $viewData = [
-            'title' => $instrument['name'] . ' - AGS',
-            'subtitle' => Str::limit($instrument['name'] . ' - instrument information', 50),
+            'title' => $instrument['name'].' - AGS',
+            'subtitle' => Str::limit($instrument['name'].' - instrument information', 50),
             'instrument' => $instrument,
-            'category' => __('attributes.categories.' . $instrument->getCategory()),
+            'category' => __('attributes.categories.'.$instrument->getCategory()),
             'reviews' => $instrument->reviews,
         ];
 
         return view('instrument.show')->with('viewData', $viewData);
     }
 
+    public function addToCart(Request $request, string $id): RedirectResponse
+    {
+        // Verifica si el instrumento existe
+        $instrument = Instrument::findOrFail($id);
+
+        // Obtiene la cantidad del formulario
+        $quantity = $request->input('quantity', 1); // Por defecto es 1 si no se proporciona cantidad
+
+        // Verifica si la cantidad solicitada es menor o igual al stock disponible
+        if ($quantity > $instrument->getQuantity()) {
+            return redirect()->back()->withErrors(['quantity' => 'The requested quantity exceeds the available stock.']);
+        }
+
+        // Agregar el instrumento al carrito con la cantidad especificada
+        $cartItems = $request->session()->get('cart_items', []);
+        $cartItems[] = ['id' => $id, 'type' => 'instrument', 'quantity' => $quantity];
+        $request->session()->put('cart_items', $cartItems);
+
+        return redirect()->route('cart.index')->with('message', 'Instrument added to cart!');
+    }
+
     public function create(): View
     {
         $viewData = [];
-        $viewData['title'] =  __('navbar.create_instrument');
+        $viewData['title'] = __('navbar.create_instrument');
         $viewData['subtitle'] = __('navbar.create_instrument');
 
         return view('instrument.create')->with('viewData', $viewData);
@@ -76,11 +105,9 @@ class InstrumentController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
-
         $instrument = new Instrument;
-        
-        try {
 
+        try {
             $instrument->validate($request->all());
             $imagePath = $this->imageService->store($request);
             $instrument = Instrument::create([
