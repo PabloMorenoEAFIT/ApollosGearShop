@@ -9,12 +9,18 @@ class LessonFactory extends Factory
 {
     protected $model = Lesson::class;
 
+    protected $difficulty = [
+        'easy',
+        'medium',
+        'hard',
+    ];
+
     public function definition()
     {
         return [
             'name' => $this->faker->word(),
             'description' => $this->faker->sentence(),
-            'difficulty' => $this->faker->numberBetween(1, 5),
+            'difficulty' => $this->difficulty[array_rand($this->difficulty)],
             'schedule' => $this->faker->date($format = 'm-d-Y'),
             'totalHours' => $this->faker->numberBetween(1, 100),
             'location' => $this->faker->city(),

@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Illuminate\Support\Collection;
 
 class InstrumentController extends Controller
 {
@@ -24,17 +25,11 @@ class InstrumentController extends Controller
         $filters = $this->getFilters($request);
         $instruments = Instrument::filterInstruments($filters)->get();
 
-        //Get unique categories to show as filter options
-        $allCategories = Instrument::pluck('category')->unique();
-        $categories = $allCategories->mapWithKeys(function ($category) {
-            return [$category => __('attributes.categories.'.$category)];
-        });
-
         $viewData = [
             'title' => __('messages.instrument_list'),
             'subtitle' => __('navbar.list_instruments'),
             'message' => Session::get('message'),
-            'categories' => $categories,
+            'categories' => $this->getCategories(),
             'instruments' => $instruments,
         ];
 
@@ -51,17 +46,21 @@ class InstrumentController extends Controller
         ];
     }
 
-    public function create(): View
+    protected function getCategories(): Collection
     {
         $allCategories = Instrument::pluck('category')->unique();
-        $categories = $allCategories->mapWithKeys(function ($category) {
-            return [$category => __('attributes.categories.'.$category)];
-        });
 
+        return $allCategories->mapWithKeys(function ($category) {
+            return [$category => __('attributes.categories.' . $category)];
+        });
+    }
+
+    public function create(): View
+    {
         $viewData = [
             'title' => __('navbar.create_instrument'),
             'subtitle' => __('navbar.create_instrument'),
-            'categories' => $categories,
+            'categories' => $this->getCategories(),
         ];
 
         return view('instrument.create')->with('viewData', $viewData);
@@ -69,10 +68,7 @@ class InstrumentController extends Controller
 
     public function show(string $id, Request $request): View|RedirectResponse
     {
-        $instrument = Instrument::findOrFail($id);
-        $instrument = Instrument::with('reviews.user')->findOrFail($id);
-
-        $viewData['message'] = 'Instrument added to cart!';
+        $instrument = Instrument::with('reviews.user')->findOrFail($id); // Eager load
 
         $viewData = [
             'title' => $instrument['name'].' - AGS',
@@ -91,9 +87,9 @@ class InstrumentController extends Controller
         $imagePath = $this->imageService->store($request);
         Instrument::createInstrument($request->all(), $imagePath);
 
-        $message = __('messages.created');
+        $viewData['message'] = __('messages.created');
 
-        return redirect()->route('instrument.index')->with('message', $message);
+        return redirect()->route('instrument.index')->with('message', $viewData['message']);
     }
 
     public function delete(int $id): RedirectResponse

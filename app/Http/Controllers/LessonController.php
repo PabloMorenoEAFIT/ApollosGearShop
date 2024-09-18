@@ -37,9 +37,6 @@ class LessonController extends Controller
     {
         $lesson = Lesson::findOrFail($id);
 
-        /*if (CartUtils::addToCart($request, $id, 'lesson')) {
-            return redirect()->route('cart.index')->with('message', 'Lesson added to cart!');
-        }*/
         $viewData = [
             'title' => $lesson['name'].' - AGS',
             'subtitle' => $lesson['name'].' - lesson information',
@@ -61,8 +58,8 @@ class LessonController extends Controller
     {
         $lesson = new Lesson;
         $validatedData = $lesson->validate($request->all());
+        Lesson::create($validatedData);
 
-        $lesson = Lesson::create($validatedData);
         $viewData['message'] = 'Lesson successfully created!';
 
         return redirect()->route('lesson.index', $viewData);

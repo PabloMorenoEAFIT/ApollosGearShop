@@ -22,14 +22,15 @@
                             rows="4">{{ old('description') }}</textarea>
                         <select class="form-control mb-2" name="difficulty">
                             <option value="">{{ __('Select difficulty') }}</option>
-                            <option value="principiante" {{ old('difficulty') == 'principiante' ? 'selected' : '' }}>
-                                Principiante</option>
-                            <option value="intermedio" {{ old('difficulty') == 'intermedio' ? 'selected' : '' }}>
-                                Intermedio</option>
-                            <option value="avanzado" {{ old('difficulty') == 'avanzado' ? 'selected' : '' }}>Avanzado
+                            <option value="easy" {{ old('difficulty') == 'principiante' ? 'selected' : '' }}>
+                                Beginner</option>
+                            <option value="medium" {{ old('difficulty') == 'intermedio' ? 'selected' : '' }}>
+                                Intermediate</option>
+                            <option value="hard" {{ old('difficulty') == 'avanzado' ? 'selected' : '' }}>
+                                Advanced
                             </option>
                         </select>
-                        <input type="text" class="form-control mb-2" placeholder="Enter schedule" name="schedule"
+                        <input type="datetime-local" class="form-control mb-2" name="schedule"
                             value="{{ old('schedule') }}" />
                         <input type="text" class="form-control mb-2" placeholder="Enter totalHours" name="totalHours"
                             value="{{ old('totalHours') }}" />

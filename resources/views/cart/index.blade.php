@@ -10,11 +10,9 @@
         <ul class="list-group">
             @foreach($viewData['cartProducts'] as $item)
                 <li class="list-group-item">
+                    <strong>Instrument:</strong> {{ $item['product']->getName() }} - {{ $item['product']->getFormattedPrice() }} 
                     @if($item['type'] === 'Instrument')
-                        <strong>Instrument:</strong> {{ $item['product']->getName() }} - {{ $item['product']->getFormattedPrice() }} 
                         - Quantity: {{ $item['quantity'] }}
-                    @elseif($item['type'] === 'Lesson')
-                        <strong>Lesson:</strong> {{ $item['product']->getName() }} - {{ $item['product']->getFormattedPrice() }}
                     @endif
                 </li>
             @endforeach

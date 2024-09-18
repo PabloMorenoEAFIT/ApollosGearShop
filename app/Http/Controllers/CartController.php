@@ -14,7 +14,6 @@ class CartController extends Controller
     {
         $cartItems = $request->session()->get('cart_items', []);
         $cartProducts = $this->getCartProducts($cartItems);
-        ($cartItems);
 
         $viewData = [
             'title' => 'Cart - Online Store',
@@ -27,25 +26,47 @@ class CartController extends Controller
 
     public function add(Request $request, int $id, string $type): RedirectResponse
     {
-        // Validate the product type
-        if (! in_array($type, ['Instrument', 'Lesson'])) {
+        if (! $this->isValidProductType($type)) {
             return redirect()->back()->withErrors('Invalid product type.');
         }
 
-        // Validate the product exists based on type
-        $model = $type === 'Instrument' ? Instrument::class : Lesson::class;
-        $product = $model::find($id);
+        $product = $this->getProductById($id, $type);
         if (! $product) {
             return redirect()->back()->withErrors('Product not found.');
         }
 
-        // Validate quantity
-        $quantity = $request->input('quantity', 1);
-        if ($type === 'Instrument' && $quantity > $product->getQuantity()) {
+        $quantity = $this->getValidQuantity($request, $product, $type);
+        if ($quantity === false) {
             return redirect()->back()->withErrors(['quantity' => 'The requested quantity exceeds the available stock.']);
         }
 
-        // Get current cart items from session
+        $this->updateCart($request, $id, $type, $quantity);
+
+        return redirect()->route('cart.index')->with('message', 'Item added to cart!');
+    }
+
+    private function isValidProductType(string $type): bool
+    {
+        return in_array($type, ['Instrument', 'Lesson']);
+    }
+
+    private function getProductById(int $id, string $type)
+    {
+        $model = $type === 'Instrument' ? Instrument::class : Lesson::class;
+        return $model::find($id);
+    }
+
+    private function getValidQuantity(Request $request, $product, string $type)
+    {
+        $quantity = $request->input('quantity', 1);
+        if ($type === 'Instrument' && $quantity > $product->getQuantity()) {
+            return false;
+        }
+        return $quantity;
+    }
+
+    private function updateCart(Request $request, int $id, string $type, int $quantity): void
+    {
         $cartItems = $request->session()->get('cart_items', []);
         $existingItemKey = $this->findCartItem($cartItems, $id, $type);
 
@@ -60,14 +81,12 @@ class CartController extends Controller
         }
 
         $request->session()->put('cart_items', $cartItems);
-
-        return redirect()->route('cart.index')->with('message', 'Item added to cart!');
     }
+
 
     public function removeAll(Request $request): RedirectResponse
     {
         $request->session()->forget('cart_items');
-
         return back();
     }
 
@@ -95,7 +114,6 @@ class CartController extends Controller
                 }
             }
         }
-
         return $cartProducts;
     }
 
