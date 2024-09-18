@@ -7,7 +7,6 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Illuminate\View\View;
-use InvalidArgumentException;
 
 class StockController extends Controller
 {
@@ -47,56 +46,33 @@ class StockController extends Controller
 
         $quantity = $request->input('addQuantity');
         $comments = $request->input('addComments');
+        $stock->addStock($quantity, $comments);
+        $viewData['message'] = 'Stock added successfully!';
 
-        $viewData['message'] = '';
+        return redirect()->route('stock.show', ['id' => $id])->with('success', $viewData['message']);
 
-        try {
-            $stock->addStock($quantity, 'added', $comments);
-            $viewData['message'] = 'Stock added successfully!';
-
-            return redirect()->route('stock.show', ['id' => $id])->with('success', $viewData['message']);
-        } catch (InvalidArgumentException $e) {
-            $viewData['message'] = $e->getMessage();
-
-            return redirect()->route('stock.show', ['id' => $id])->with('error', $viewData['message']);
-        }
     }
 
     public function lowerStock(Request $request, int $id): RedirectResponse
     {
         $stock = Stock::findOrFail($id);
-
         $quantity = $request->input('lower_quantity');
         $comments = $request->input('lower_comments');
+        $stock->lowerStock($quantity, $comments);
+        $viewData['message'] = 'Stock lowered successfully!';
 
-        $viewData['message'] = '';
+        return redirect()->route('stock.show', ['id' => $id])->with('success', $viewData['message']);
 
-        try {
-            $stock->lowerStock($quantity, 'lowered', $comments);
-            $viewData['message'] = 'Stock lowered successfully!';
-
-            return redirect()->route('stock.show', ['id' => $id])->with('success', $viewData['message']);
-        } catch (InvalidArgumentException $e) {
-            $viewData['message'] = $e->getMessage();
-
-            return redirect()->route('stock.show', ['id' => $id])->with('error', $viewData['message']);
-        }
     }
 
     public function delete(int $id): RedirectResponse
     {
-        $viewData['message'] = '';
 
-        try {
-            $stock = Stock::findOrFail($id);
-            $stock->delete();
-            $viewData['message'] = __('messages.deleted');
+        $stock = Stock::findOrFail($id);
+        $stock->delete();
+        $viewData['message'] = __('messages.deleted');
 
-            return redirect()->route('stock.index')->with('message', $viewData['message']);
-        } catch (InvalidArgumentException $e) {
-            $viewData['message'] = $e->getMessage();
+        return redirect()->route('stock.index')->with('message', $viewData['message']);
 
-            return redirect()->route('stock.index')->with('error', $viewData['message']);
-        }
     }
 }

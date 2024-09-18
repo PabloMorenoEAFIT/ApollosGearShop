@@ -2,6 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Instrument;
+use App\Models\Stock;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class InstrumentFactory extends Factory
@@ -24,7 +26,7 @@ class InstrumentFactory extends Factory
 
         $numberOfReviews = $this->faker->numberBetween(0, 100);
 
-        return [
+        $instrumentAttributes = [
             'name' => $this->faker->company,
             'description' => $this->faker->text(100),
             'category' => $this->faker->randomElement($categories),
@@ -36,5 +38,20 @@ class InstrumentFactory extends Factory
             'created_at' => $this->faker->dateTimeThisDecade,
             'updated_at' => $this->faker->dateTimeThisDecade,
         ];
+
+        $instrument = Instrument::create($instrumentAttributes);
+
+        $stockAttributes = [
+            'quantity' => $this->faker->numberBetween(1, 20),
+            'type' => 'Add',
+            'comments' => 'Initial stock for '.$instrument->name,
+            'instrument_id' => $instrument->id,
+            'created_at' => $instrument->created_at,
+            'updated_at' => $instrument->updated_at,
+        ];
+
+        Stock::create($stockAttributes);
+
+        return $instrumentAttributes;
     }
 }

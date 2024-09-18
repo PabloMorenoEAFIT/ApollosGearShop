@@ -24,20 +24,21 @@ class OrderController extends Controller
 
     }
 
-    public function show(string $id): View|RedirectResponse
+    public function show(string $id): View
     {
-        $viewData = [];
         $order = Order::findOrFail($id);
-        $viewData['title'] = $order['id'].' - AGS';
-        $viewData['subtitle'] = $order['id'].' - order information';
-        $viewData['order'] = $order;
+
+        $viewData = [
+            'title' => $order['id'].' - AGS',
+            'subtitle' => $order['id'].' - order information',
+            'order' => $order,
+        ];
 
         return view('order.show')->with('viewData', $viewData);
     }
 
     public function create(): View
     {
-        $viewData = []; //to be sent to the view
         $viewData['title'] = 'Create Order';
 
         return view('order.create')->with('viewData', $viewData);
@@ -45,37 +46,13 @@ class OrderController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'creationDate' => 'required',
-            'deliveryDate' => 'required',
-            'totalPrice' => 'required|numeric|gt:0',
-        ]);
+        $order = new Order;
+        $validatedData = $order->validate($request->all());
+        $order = Order::create($validatedData);
 
-        $order = Order::create($request->only(['creationDate', 'deliveryDate', 'totalPrice']));
+        $viewData['message'] = 'Order successfully created!';
 
-        return redirect()->route('order.success', [
-            'creationDate' => $order->creationDate,
-            'deliveryDate' => $order->deliveryDate,
-            'totalPrice' => $order->totalPrice,
-        ]);
-    }
-
-    public function success(Request $request): View|RedirectResponse
-    {
-        $order = $request->only(['creationDate', 'deliveryDate', 'totalPrice']);
-
-        if (empty($order['creationDate']) || empty($order['deliveryDate']) || empty($order['totalPrice'])) {
-            Log::info('order details missing in query parameters.');
-
-            return redirect()->route('home.index');
-        }
-
-        $viewData = [];
-        $viewData['title'] = 'Success - AGS';
-        $viewData['subtitle'] = 'Order successfully created!';
-        $viewData['order'] = $order;
-
-        return view('order.success')->with('viewData', $viewData);
+        return redirect()->route('home.index')->with('success', $viewData['message']);
     }
 
     public function delete($id): RedirectResponse

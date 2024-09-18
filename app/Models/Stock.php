@@ -100,7 +100,7 @@ class Stock extends Model
 
     /* ---- CUSTOM METHODS ----*/
 
-    public function addStock(int $quantity, string $type = 'Add', ?string $comments = null): void
+    public function addStock(int $quantity, ?string $comments = null): void
     {
         $latestStock = Stock::where('instrument_id', $this->attributes['instrument_id'])
             ->orderBy('created_at', 'desc')
@@ -110,15 +110,14 @@ class Stock extends Model
 
         Stock::create([
             'quantity' => $newQuantity,
-            'type' => $type,
+            'type' => 'Add',
             'comments' => $comments,
             'instrument_id' => $this->attributes['instrument_id'],
         ]);
     }
 
-    public function lowerStock(int $quantity, string $type = 'Lower', ?string $comments = null): void
+    public function lowerStock(int $quantity, ?string $comments = null): void
     {
-        // Ensure the quantity does not become negative
         if ($this->attributes['quantity'] < $quantity) {
             throw new InvalidArgumentException('Quantity cannot be negative.');
         }
@@ -132,7 +131,7 @@ class Stock extends Model
         Stock::create([
             'quantity' => $newQuantity,
             'comments' => $comments,
-            'type' => $type,
+            'type' => 'Lower',
             'instrument_id' => $this->attributes['instrument_id'],
         ]);
     }

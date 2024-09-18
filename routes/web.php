@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\CheckGroup;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home.index');
@@ -16,7 +18,6 @@ Route::delete('/lessons/{id}', 'App\Http\Controllers\LessonController@delete')->
 Route::get('/orders', 'App\Http\Controllers\OrderController@index')->name('order.index');
 Route::get('/orders/create', 'App\Http\Controllers\OrderController@create')->name('order.create');
 Route::post('/orders/save', 'App\Http\Controllers\OrderController@save')->name('order.save');
-Route::get('/orders/success', 'App\Http\Controllers\OrderController@success')->name('order.success');
 Route::get('/orders/{id}', 'App\Http\Controllers\OrderController@show')->name('order.show');
 Route::delete('/orders/{id}', 'App\Http\Controllers\OrderController@delete')->name('order.delete');
 
@@ -25,7 +26,7 @@ Route::get('/instruments', 'App\Http\Controllers\InstrumentController@index')->n
 Route::get('/instruments/create', 'App\Http\Controllers\InstrumentController@create')->name('instrument.create');
 Route::get('/instruments/{id}', 'App\Http\Controllers\InstrumentController@show')->name('instrument.show');
 Route::post('/instruments/save', 'App\Http\Controllers\InstrumentController@save')->name('instrument.save');
-route::delete('/instruments/{id}', 'App\Http\Controllers\InstrumentController@delete')->name('instrument.delete');
+Route::delete('/instruments/{id}', 'App\Http\Controllers\InstrumentController@delete')->name('instrument.delete');
 
 // stock routes
 Route::get('/stocks', 'App\Http\Controllers\StockController@index')->name('stock.index');
@@ -35,15 +36,21 @@ Route::post('/stocks/{id}/lower', 'App\Http\Controllers\StockController@lowerSto
 Route::delete('/stocks/{id}/delete', 'App\Http\Controllers\StockController@delete')->name('stock.delete');
 
 // reviews routes
-Route::get('/instruments/{id}/create-reviews', 'App\Http\Controllers\ReviewController@create')->name('review.create');
-Route::post('/instruments/{id}/save-reviews', 'App\Http\Controllers\ReviewController@save')->name('review.save');
-
-Auth::routes();
+Route::get('/instruments/{id}/create-review', 'App\Http\Controllers\ReviewController@create')->name('review.create');
+Route::post('/instruments/{id}/save-review', 'App\Http\Controllers\ReviewController@save')->name('review.save');
 
 // cart routes
 Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.index');
-Route::get('/cart/add/{id}', 'App\Http\Controllers\CartController@add')->name('cart.add');
+Route::post('/cart/add/{id}/{type}', 'App\Http\Controllers\CartController@add')->name('cart.add');
 Route::get('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
 
-Route::post('/instruments/{id}/add-to-cart', 'App\Http\Controllers\InstrumentController@addToCart')->name('instrument.addToCart');
-Route::post('/lesson/{id}/add-to-cart', 'App\Http\Controllers\LessonController@addToCart')->name('lesson.addToCart');
+/*
+Route::middleware([CheckGroup::class.':user'])->group(function () {
+
+});
+
+Route::middleware([])->group(function () {
+});
+*/
+
+Auth::routes();

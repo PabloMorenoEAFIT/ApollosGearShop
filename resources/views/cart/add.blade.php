@@ -1,9 +1,8 @@
-<!-- resources/views/cart/add.blade.php -->
-<form id="addToCartForm" action="{{ route('instrument.addToCart', ['id' => $instrument->getId()]) }}" method="POST">
+<form action="{{ route('cart.add', ['id' => $productId, 'type' => $productType]) }}" method="POST">
     @csrf
-    <div class="mb-3">
-        <label for="quantity" class="form-label">{{ __('attributes.quantity') }}</label>
-        <input type="number" id="quantity" name="quantity" class="form-control" min="1" max="{{ $instrument->getQuantity() }}" value="1" required data-max-quantity="{{ $instrument->getQuantity() }}">
+    <div class="form-group">
+        <label for="quantity">Quantity:</label>
+        <input type="number" name="quantity" id="quantity" class="form-control" value="1" min="1">
     </div>
-    <button type="submit" class="btn btn-primary">{{ __('messages.add_to_cart') }}</button>
+    <button type="submit" class="btn btn-primary">Add to Cart</button>
 </form>

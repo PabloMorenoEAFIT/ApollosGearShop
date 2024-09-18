@@ -67,8 +67,8 @@
                     <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
                 </form>
 
-                <!-- Include Add to Cart Form -->
-                @include('cart.add', ['instrument' => $viewData['instrument']])
+                <!-- Include Add to Cart Form for Instruments -->
+                @include('cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument'])
 
             </div>
         </div>
@@ -76,21 +76,3 @@
 </div>
 @endsection
 
-@section('scripts')
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const form = document.getElementById('addToCartForm');
-    const quantityInput = document.getElementById('quantity');
-    
-    form.addEventListener('submit', function(event) {
-        const maxQuantity = parseInt(quantityInput.getAttribute('data-max-quantity'));
-        const quantity = parseInt(quantityInput.value);
-
-        if (quantity > maxQuantity) {
-            event.preventDefault(); // Evita el envío del formulario
-            alert('{{ __('validation.custom.quantity_greater_than_available') }}');
-        }
-    });
-});
-</script>
-@endsection

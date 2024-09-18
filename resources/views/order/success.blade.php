@@ -6,13 +6,13 @@
     <div class="row text-center">
         <h2>Lesson</h2>
         <div class="col-lg-4 ms-auto">
-            <p class="lead">Creation date: {{$viewData["order"]["creationDate"]}} </p>
+            <p class="lead">Creation date: {{$viewData["order"]->getCreationDate()}} </p>
         </div>
         <div class="col-lg-4 me-auto">
-            <p class="lead">Delivery date: {{$viewData["order"]["deliveryDate"]}}</p>
+            <p class="lead">Delivery date: {{$viewData["order"]->getDeliveryDate()}}</p>
         </div>
         <div class="col-lg-4 me-auto">
-            <p class="lead">Total price: {{$viewData["order"]["totalPrice"]}}</p>
+            <p class="lead">Total price: {{$viewData["order"]->getTotalPrice()}}</p>
         </div>
     </div>
 </div>

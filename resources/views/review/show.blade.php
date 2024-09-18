@@ -11,9 +11,9 @@
     <ul class="list-group">
         @foreach ($viewData['reviews'] as $review)
         <li class="list-group-item">
-            <strong>{{ $review->user->name }}</strong>
-            <p>Score: {{ $review->score }} / 5</p>
-            <p>{{ $review->description }}</p>
+            <strong>{{ $review->user->getName() }}</strong>
+            <p>Score: {{ $review->getScore() }} / 5</p>
+            <p>{{ $review->getDescription()}}</p>
         </li>
         @endforeach
     </ul>

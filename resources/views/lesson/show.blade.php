@@ -10,23 +10,23 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5>ID: {{  $viewData["lesson"]["id"]  }}</h5>
+                <h5>ID: {{  $viewData["lesson"]->getId()  }}</h5>
                 <h5 class="card-title">
-                    {{ $viewData["lesson"]["name"] }}
+                    {{ $viewData["lesson"]->getName() }}
                 </h5>
                 <p>
-                {{  $viewData["lesson"]["description"]  }}
+                {{  $viewData["lesson"]->getDescription()  }}
                 </p>
-                <strong>Price: </strong>${{ number_format($viewData["lesson"]["price"], 2) }}
+                <strong>Price: </strong>{{ $viewData["lesson"]->getFormattedPrice() }}
             </div>
             <div class="card-footer text-muted text-center">
-                <form action="{{ route('lesson.delete', $viewData['lesson']['id']) }}" method="POST">
+                <form action="{{ route('lesson.delete', $viewData['lesson']->getId()) }}" method="POST">
                     @csrf
                     @method('DELETE')
                     <button type="submit" class="btn btn-danger">Delete lesson</button>
                 </form>
                 
-                <form action="{{ route('lesson.addToCart', ['id' => $viewData['lesson']->id]) }}" method="POST">
+                <form action="{{ route('cart.add', ['id' => $viewData['lesson']->getId(), 'type'=> 'Lesson']) }}" method="POST">
                     @csrf
                     <button type="submit" class="btn btn-primary">Add to Cart</button>
                 </form>

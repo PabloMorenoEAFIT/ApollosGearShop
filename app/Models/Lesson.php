@@ -18,27 +18,6 @@ class Lesson extends Model
         'location', 'price', 'teacher',
     ];
 
-    // Validaciones movidas al modelo
-    public function validate(array $data): array
-    {
-        $validator = Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'difficulty' => 'required|string',
-            'schedule' => 'required|string',
-            'totalHours' => 'required|numeric|gt:0',
-            'location' => 'required|string',
-            'price' => 'required|numeric|gt:0',
-            'teacher' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        return $validator->validated();
-    }
-
     // Getters y setters
     public function getId(): int
     {
@@ -112,7 +91,7 @@ class Lesson extends Model
 
     public function getFormattedPrice(): string
     {
-        return '$ '.number_format($this->getPrice(), 2);
+        return '$ '.number_format($this->attributes['price'], 2);
     }
 
     public function setPrice(int $price): void
@@ -128,5 +107,27 @@ class Lesson extends Model
     public function setTeacher(string $teacher): void
     {
         $this->attributes['teacher'] = $teacher;
+    }
+
+    /* ---- CUSTOM METHODS ----*/
+
+    public function validate(array $data): array
+    {
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'difficulty' => 'required|string',
+            'schedule' => 'required|string',
+            'totalHours' => 'required|numeric|gt:0',
+            'location' => 'required|string',
+            'price' => 'required|numeric|gt:0',
+            'teacher' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 }

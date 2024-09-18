@@ -106,4 +106,18 @@ class Review extends Model
 
         return $validator->validated();
     }
+
+    public static function createReview(array $data, int $instrumentId): self
+    {
+        $validatedData = (new self)->validate($data);
+
+        $review = self::create(array_merge($validatedData));
+
+        $instrument = Instrument::findOrFail($instrumentId);
+        $instrument->setNumberOfReviews();
+        $instrument->setReviewSum($validatedData['score']);
+        $instrument->save();
+
+        return $review;
+    }
 }

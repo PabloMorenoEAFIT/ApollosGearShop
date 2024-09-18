@@ -131,9 +131,9 @@ class Instrument extends Model
         return $this->attributes['numberOfReviews'];
     }
 
-    public function setNumberOfReviews(int $addReview): void
+    public function setNumberOfReviews(): void
     {
-        $this->attributes['numberOfReviews'] += $addReview;
+        $this->attributes['numberOfReviews'] += 1;
     }
 
     public function getQuantity(): int
@@ -234,5 +234,19 @@ class Instrument extends Model
         }
 
         return $validator->validated();
+    }
+
+    public static function createInstrument(array $data, string $imagePath): self
+    {
+        $validatedData = (new self)->validate($data);
+
+        $instrument = self::create(array_merge($validatedData, ['image' => $imagePath]));
+
+        $instrument->stocks()->create([
+            'quantity' => $data['quantity'] ?? 0,
+            'comments' => 'Initial stock',
+        ]);
+
+        return $instrument;
     }
 }

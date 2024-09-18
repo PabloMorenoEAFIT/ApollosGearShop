@@ -39,17 +39,9 @@
                             <label for="category" class="form-label">{{ __('attributes.category') }}</label>
                             <select id="category" class="form-control" name="category" required>
                                 <option value="">{{ __('attributes.placeholders.category') }}</option>
-                                <option value="strings">{{ __('attributes.categories.strings') }}</option>
-                                <option value="woodwind">{{ __('attributes.categories.woodwind') }}</option>
-                                <option value="brass">{{ __('attributes.categories.brass') }}</option>
-                                <option value="percussion">{{ __('attributes.categories.percussion') }}</option>
-                                <option value="keyboards_pianos">{{ __('attributes.categories.keyboards_pianos') }}</option>
-                                <option value="ethnic_traditional">{{ __('attributes.categories.ethnic_traditional') }}</option>
-                                <option value="electronic_dj">{{ __('attributes.categories.electronic_dj') }}</option>
-                                <option value="accessories">{{ __('attributes.categories.accessories') }}</option>
-                                <option value="studio_recording">{{ __('attributes.categories.studio_recording') }}</option>
-                                <option value="sheet_music_books">{{ __('attributes.categories.sheet_music_books') }}</option>
-                                <option value="bowed_strings">{{ __('attributes.categories.bowed_strings') }}</option>
+                                @foreach($viewData['categories'] as $value => $label)
+                                    <option value="{{ $value }}">{{ $label }}</option>
+                                @endforeach
                             </select>
                         </div>
 
