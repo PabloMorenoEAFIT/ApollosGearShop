@@ -23,7 +23,6 @@
     <title>@yield('title', 'AGS')</title>
 </head>
 
-
 <body>
     <!-- header -->
 
@@ -40,34 +39,12 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('instrument.index') }}">{{ __('navbar.list_instruments') }}</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('instrument.create') }}">{{ __('navbar.insert_instrument') }}</a>
+                        <a class="nav-link active" href="{{ route('order.index') }}">{{ __('navbar.list_orders') }}</a>
                     </li>
 
                     <li class="nav-item">
-                        <a class="nav-link active" href="{{ route('stock.index') }}">{{ __('navbar.stock') }}</a>
+                        <a class="nav-link active" href="{{ route('lesson.index') }}">{{ __('navbar.list_lessons') }}</a>
                     </li>
-
-                </ul>
-                <!-- Search Form -->
-                <form class="d-flex" role="search" method="GET" action="{{ route('instrument.index') }}">
-                    <input class="form-control me-2" type="search" name="searchByName" placeholder="{{ __('navbar.search_placeholder') }}" aria-label="Search" value="{{ request('searchByName') }}">
-                    <button class="btn btn-outline-success" type="submit">{{ __('navbar.search_button') }}</button>
-                </form>
-
-                <div class="vr bg-white mx-2 d-none d-lg-block"></div>
-                @guest
-                    <a class="nav-link active px-2" href="{{ route('login') }}">Login</a>
-                    <a class="nav-link active" href="{{ route('register') }}">Register</a>
-                @else
-                    <form id="logout" action="{{ route('logout') }}" method="POST">
-                        <a role="button" class="nav-link active px-2" onclick="document.getElementById('logout').submit();">Logout</a>
-                    @csrf
-                    </form>
-                @endguest
-
 
             </div>
         </div>
