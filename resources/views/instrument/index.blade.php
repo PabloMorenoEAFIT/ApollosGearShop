@@ -54,6 +54,16 @@
                 </select>
             </div>
             <div class="col-md-3">
+                <select name="filterComment" id="filterComment" class="form-control" style="background-color: #d1d5db"  >
+                    <option value="">{{ __('attributes.placeholders.comments') }}</option>
+                    <option value="mostCommented" {{ request('filterComment') ? 'selected' : '' }}>
+                        {{ __('attributes.mostCommented') }}
+                    </option>
+                </select>
+            </div>
+
+
+            <div class="col-md-3">
                 <button type="submit" class="btn btn-primary">{{ __('attributes.filter') }}</button>
             </div>
         </div>

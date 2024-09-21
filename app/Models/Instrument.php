@@ -207,6 +207,10 @@ class Instrument extends Model
             $this->applySorting($query, $filters['filterOrder']);
         }
 
+        if (! empty($filters['filterComment'])) {
+            $query->orderBy('numberOfReviews', 'desc');
+        }
+
         return $query;
     }
 
