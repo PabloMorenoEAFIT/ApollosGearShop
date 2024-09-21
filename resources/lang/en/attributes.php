@@ -1,6 +1,7 @@
 <?php
 
 return [
+    'remove_All' => 'Remove all items',
     'id' => 'ID',
     'name' => 'Name',
     'description' => 'Description',
@@ -54,6 +55,5 @@ return [
     ],
     'reviews' => 'Reviews',
     'no_reviews' => 'No reviews available for this product',
-    'score' => 'Score'
+    'score' => 'Score',
 ];
-
