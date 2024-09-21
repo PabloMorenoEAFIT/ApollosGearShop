@@ -43,6 +43,7 @@ class InstrumentController extends Controller
             'category' => $request->input('category'),
             'rating' => $request->input('rating'),
             'filterOrder' => $request->input('filterOrder'),
+            'filterComment' => $request->input('filterComment'),
         ];
     }
 
