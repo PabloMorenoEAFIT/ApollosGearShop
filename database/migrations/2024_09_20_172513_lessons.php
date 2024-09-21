@@ -22,7 +22,6 @@ return new class extends Migration
             $table->integer('price');
             $table->float('reviewSum');
             $table->integer('numberOfReviews');
-            //Esto en realidad es stock
             $table->integer('quantity');
             $table->string('image');
             $table->timestamps();
