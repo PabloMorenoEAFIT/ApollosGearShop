@@ -11,15 +11,18 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
+    /*USER ATTRIBUTES
+
+    $this->attributes['name'] - string - contains the user name
+    $this->attributes['email'] - string - contains the user email
+    $this->attributes['password'] - string - contains the user password
+    */
+
     protected $fillable = [
         'name',
         'email',
         'password',
+        'group',
     ];
 
     /**
@@ -43,5 +46,15 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function getName(): string
+    {
+        return $this->attributes['name'];
+    }
+
+    public function getEmail(): string
+    {
+        return $this->attributes['email'];
     }
 }

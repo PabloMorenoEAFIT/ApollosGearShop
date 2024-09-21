@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order; // importar Request
+use App\Models\Order; 
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -24,13 +24,13 @@ class OrderController extends Controller
 
     }
 
-    public function show(string $id): View|RedirectResponse
+    public function show(string $id): View
     {
         $order = Order::findOrFail($id);
 
         $viewData = [
-            'title' => 'Order',
-            'subtitle' => 'Order Information',
+            'title' => $order->getId().' - AGS',
+            'subtitle' => $order->getId().' - order information',
             'order' => $order,
         ];
 
@@ -39,7 +39,6 @@ class OrderController extends Controller
 
     public function create(): View
     {
-        $viewData = [];
         $viewData['title'] = 'Create Order';
 
         return view('order.create')->with('viewData', $viewData);
@@ -47,38 +46,13 @@ class OrderController extends Controller
 
     public function save(Request $request): RedirectResponse
     {
-        $validatedData = $request->validate([
-            'creationDate' => 'required',
-            'deliveryDate' => 'required',
-            'totalPrice' => 'required|numeric|gt:0',
-        ]);
+        $order = new Order;
+        $validatedData = $order->validate($request->all());
+        $order = Order::create($validatedData);
 
-        $order = Order::create($request->only(['creationDate', 'deliveryDate', 'totalPrice']));
+        $viewData['message'] = 'Order successfully created!';
 
-        return redirect()->route('order.success', [
-            'creationDate' => $order->creationDate,
-            'deliveryDate' => $order->deliveryDate,
-            'totalPrice' => $order->totalPrice,
-        ]);
-    }
-
-    public function success(Request $request): View|RedirectResponse
-    {
-        $order = $request->only(['creationDate', 'deliveryDate', 'totalPrice']);
-
-        if (empty($order['creationDate']) || empty($order['deliveryDate']) || empty($order['totalPrice'])) {
-            Log::info('order details missing in query parameters.');
-
-            return redirect()->route('home.index');
-        }
-
-        $viewData = [
-            'title' => 'Order - Created',
-            'subtitle' => __('Order successfully created!'),
-            'order' => $order,
-        ];
-
-        return view('order.success')->with('viewData', $viewData);
+        return redirect()->route('home.index')->with('success', $viewData['message']);
     }
 
     public function delete($id): RedirectResponse

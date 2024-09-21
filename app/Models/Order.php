@@ -2,8 +2,11 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\ValidationException;
 
 class Order extends Model
 {
@@ -29,25 +32,16 @@ class Order extends Model
         return $this->attributes['id'];
     }
 
-    public function getCreationDate(): date
+    public function getCreatedAt(): string
     {
-        return $this->attributes['creationDate'];
+        return $this->attributes['created_at'];
     }
 
-    public function setCreationDate(date $creationDate): void
+    public function getUpdatedAt(): string
     {
-        $this->attributes['creationDate'] = $creationDate;
+        return $this->attributes['updated_at'];
     }
 
-    public function getDeliveryDate(): date
-    {
-        return $this->attributes['deliveryDate'];
-    }
-
-    public function setDeliveryDate(date $deliveryDate): void
-    {
-        $this->attributes['deliveryDate'] = $deliveryDate;
-    }
 
     public function getTotalPrice(): int
     {
@@ -57,5 +51,20 @@ class Order extends Model
     public function setTotalPrice(int $totalPrice): void
     {
         $this->attributes['totalPrice'] = $totalPrice;
+    }
+
+    public function validate(array $data): array
+    {
+        $validator = Validator::make($data, [
+            'creationDate' => 'required',
+            'deliveryDate' => 'required',
+            'totalPrice' => 'required|numeric|gt:0',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 }

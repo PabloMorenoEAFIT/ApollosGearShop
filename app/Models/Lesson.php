@@ -12,25 +12,17 @@ class Lesson extends Model
     use HasFactory;
 
     /**
-     * ORDER ATTRIBUTES
-
+     * LESSON ATTRIBUTES
+     *
      * $this->attributes['id'] - int - contains the Lesson primary key (id)
-
      * $this->attributes['name'] - string - contains the Lesson name
-
-     * $this->attributes['description'] - satring - contains the lesson description
-
+     * $this->attributes['description'] - string - contains the lesson description
      * $this->attributes['difficulty'] - string - contains the difficulty of the lesson
-
      * $this->attributes['schedule'] - string - contains the lesson schedule
-
      * $this->attributes['totalHours'] - int - contains the total hours of the lesson
-
      * $this->attributes['location'] - string - contains the lesson location
-
      * $this->attributes['price'] - int - contains the lesson price
-
-     * $this->attributes['string'] - int - contains the teacher of the lesson
+     * $this->attributes['teacher'] - string - contains the teacher of the lesson
      */
     protected $table = 'lessons';
 
@@ -39,27 +31,6 @@ class Lesson extends Model
         'location', 'price', 'teacher',
     ];
 
-    public function validate(array $data): array
-    {
-        $validator = Validator::make($data, [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'difficulty' => 'required|string',
-            'schedule' => 'required|string',
-            'totalHours' => 'required|numeric|gt:0',
-            'location' => 'required|string',
-            'price' => 'required|numeric|gt:0',
-            'teacher' => 'required|string|max:255',
-        ]);
-
-        if ($validator->fails()) {
-            throw new ValidationException($validator);
-        }
-
-        return $validator->validated();
-    }
-
-    // Getters y setters
     public function getId(): int
     {
         return $this->attributes['id'];
@@ -148,5 +119,27 @@ class Lesson extends Model
     public function setTeacher(string $teacher): void
     {
         $this->attributes['teacher'] = $teacher;
+    }
+
+    /* ---- CUSTOM METHODS ----*/
+
+    public function validate(array $data): array
+    {
+        $validator = Validator::make($data, [
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'difficulty' => 'required|string',
+            'schedule' => 'required|string',
+            'totalHours' => 'required|numeric|gt:0',
+            'location' => 'required|string',
+            'price' => 'required|numeric|gt:0',
+            'teacher' => 'required|string|max:255',
+        ]);
+
+        if ($validator->fails()) {
+            throw new ValidationException($validator);
+        }
+
+        return $validator->validated();
     }
 }

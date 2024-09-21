@@ -20,15 +20,7 @@ return new class extends Migration
             $table->integer('totalHours');
             $table->string('location');
             $table->integer('price');
-<<<<<<< HEAD:database/migrations/2024_09_20_172513_lessons.php
             $table->string('teacher');
-=======
-            $table->float('reviewSum');
-            $table->integer('numberOfReviews');
-            //Esto en realidad es stock
-            $table->integer('quantity');
-            $table->string('image');
->>>>>>> sintax-refactoring:database/migrations/2024_09_10_193224_modify_instruments_table.php
             $table->timestamps();
         });
     }

@@ -13,7 +13,11 @@ return [
     'stock_entries' => 'Últimas Entradas de Existencias',
     'stock_details' => 'Detalles de la Entrada de Existencias',
     'create_review' => 'Crear Reseña',
+<<<<<<< HEAD
     'list_lessons' => 'Listado de lecciones',
+=======
+    'list_lessons' => 'Listar lecciones',
+>>>>>>> sintax-refactoring
     'list_orders' => 'Listar órdenes',
     'cart' => 'Carrito',
 ];
