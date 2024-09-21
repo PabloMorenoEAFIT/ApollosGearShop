@@ -16,6 +16,7 @@ return [
     'add_quantity' => 'Agregar stock',
     'lower_quantity' => 'Reducir stock',
     'rating' => 'Calificación',
+    'remove_All' => 'Eliminar todos los elementos',
     'number_of_reviews' => 'Número de Reseñas',
     'available_quantity' => 'Cantidad Disponible',
     'filter' => 'Filtrar',
