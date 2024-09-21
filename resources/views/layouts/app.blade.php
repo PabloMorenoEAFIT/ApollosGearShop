@@ -39,6 +39,10 @@
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('instrument.index') }}">{{ __('navbar.list_instruments') }}</a>
+                    </li>
+
+                    <li class="nav-item">
                         <a class="nav-link active" href="{{ route('order.index') }}">{{ __('navbar.list_orders') }}</a>
                     </li>
 
@@ -54,6 +58,9 @@
                         <a class="nav-link active" href="{{ route('order.index') }}">{{ __('navbar.list_orders') }}</a>
                     </li>
 
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{{ route('stock.index') }}">{{ __('navbar.stock') }}</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" href="{{ route('cart.index') }}">{{ __('navbar.cart') }}</a>
                     </li>

@@ -110,8 +110,10 @@ class Review extends Model
     public static function createReview(array $data, int $instrumentId): self
     {
         $validatedData = (new self)->validate($data);
+        $validatedData['instrument_id'] = $instrumentId;
+            
+        $review = auth()->user()->reviews()->create($validatedData);
 
-        $review = self::create(array_merge($validatedData));
 
         $instrument = Instrument::findOrFail($instrumentId);
         $instrument->setNumberOfReviews();
@@ -120,4 +122,6 @@ class Review extends Model
 
         return $review;
     }
+
+
 }

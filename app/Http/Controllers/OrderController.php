@@ -17,7 +17,7 @@ class OrderController extends Controller
         $viewData = [
             'title' => 'Order - Online Store',
             'subtitle' => __('navbar.list_orders'),
-            'Orders' => Order::all(),
+            'orders' => Order::all(),
         ];
 
         return view('order.index')->with('viewData', $viewData);

@@ -7,15 +7,17 @@ use App\Models\Review;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Auth;
+
 
 class ReviewController extends Controller
 {
-    public function save(Request $request, int $id): RedirectResponse
+    public function save(Request $request, int $instrumentId): RedirectResponse
     {
 
-        Review::createReview($request->all(), $id);
+        Review::createReview($request->all(), $instrumentId);
 
-        return redirect()->route('instrument.show', ['id' => $id])
+        return redirect()->route('instrument.show', ['id' => $instrumentId])
             ->with('success', 'Review added successfully!');
     }
 
