@@ -55,6 +55,13 @@
             </div>
             
             <div class="card-footer text-muted text-center">
+                <!-- Delete Lesson -->
+                <form action="{{ route('admin.lesson.delete', $viewData['lesson']->getId()) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">Delete lesson</button>
+                </form>
+                
                 <!-- Add to Cart -->
                 <form action="{{ route('cart.add', ['id' => $viewData['lesson']->getId(), 'type'=> 'Lesson']) }}" method="POST">
                     @csrf

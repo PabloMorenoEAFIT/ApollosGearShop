@@ -111,9 +111,8 @@ class Review extends Model
     {
         $validatedData = (new self)->validate($data);
         $validatedData['instrument_id'] = $instrumentId;
-            
-        $review = auth()->user()->reviews()->create($validatedData);
 
+        $review = auth()->user()->reviews()->create($validatedData);
 
         $instrument = Instrument::findOrFail($instrumentId);
         $instrument->setNumberOfReviews();
@@ -122,6 +121,4 @@ class Review extends Model
 
         return $review;
     }
-
-
 }

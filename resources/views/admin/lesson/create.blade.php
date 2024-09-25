@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">Create lesson</div>
+                <div class="card-header">{{ __('messages.create_lessons') }}</div>
                 <div class="card-body">
                     @if($errors->any())
                     <ul id="errors" class="alert alert-danger list-unstyled">
@@ -14,7 +14,7 @@
                         @endforeach
                     </ul>
                     @endif
-                    <form action="{{ route('lesson.save') }}" method="POST">
+                    <form action="{{ route('admin.lesson.save') }}" method="POST">
                         @csrf
                         <input type="text" class="form-control mb-2" placeholder="Enter the lesson name" name="name"
                             value="{{ old('name') }}" />

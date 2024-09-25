@@ -6,27 +6,24 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('stock', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('instrument_id'); // Debe coincidir con el tipo de 'instruments.id'
             $table->integer('quantity');
-            $table->string('type');
-            $table->text('comments')->nullable();
-            $table->foreignId('instrument_id')->constrained()->onDelete('cascade');
+            $table->string('comments')->nullable();
             $table->timestamps();
-        });
 
+            // Clave foránea
+            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('cascade');
+        });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('stock');
     }
 };
+
+

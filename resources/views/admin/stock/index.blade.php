@@ -24,6 +24,7 @@
                     --}}
                     <img src="{{ asset('storage/' . $stock->instrument->getImage()) }}" class="card-img-top img-card" alt="Instrument Image">
                 </div>
+                
 
                 <div class="card-body d-flex flex-column flex-grow-1">
                     <!-- Instrument Name -->
@@ -44,9 +45,13 @@
                 </div>
 
                 <div class="card-footer mt-auto text-center">
-                    <a href="{{ route('stock.show', ['id' => $stock->getId()]) }}" class="btn btn-primary">
+                    <a href="{{ route('admin.stock.show', ['id' => $stock->getId()]) }}" class="btn btn-primary">
                         {{ __('messages.details') }}
                     </a>
+<!-- options to show  -->
+                    <!-- <a href="{{ route('admin.stock.show', ['id' => $stock->instrument->getId()]) }}" class="btn btn-primary">
+                        {{ __('messages.details') }}
+                    </a> -->
                 </div>
             </div>
         </div>

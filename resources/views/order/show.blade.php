@@ -18,13 +18,6 @@
                     <b>Delivery date: </b>{{--Delivery Date: {{ $viewData["order"]->getDeliveryDate()}}--}}
                 </h5>
             </div>
-            <div class="card-footer text-muted text-center">
-                <form action="{{ route('order.delete', $viewData['order']->getId()) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete order</button>
-                </form>
-            </div>
     
         </div>
     </div>

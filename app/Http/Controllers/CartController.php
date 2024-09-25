@@ -53,6 +53,7 @@ class CartController extends Controller
     private function getProductById(int $id, string $type)
     {
         $model = $type === 'Instrument' ? Instrument::class : Lesson::class;
+
         return $model::find($id);
     }
 
@@ -62,6 +63,7 @@ class CartController extends Controller
         if ($type === 'Instrument' && $quantity > $product->getQuantity()) {
             return false;
         }
+
         return $quantity;
     }
 
@@ -83,10 +85,10 @@ class CartController extends Controller
         $request->session()->put('cart_items', $cartItems);
     }
 
-
     public function removeAll(Request $request): RedirectResponse
     {
         $request->session()->forget('cart_items');
+
         return back();
     }
 
@@ -114,6 +116,7 @@ class CartController extends Controller
                 }
             }
         }
+
         return $cartProducts;
     }
 

@@ -41,5 +41,8 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'set.language' => \App\Http\Middleware\SetLanguage::class,
+        'check_group' => \App\Http\Middleware\CheckGroup::class,
+        'admin' => \App\Http\Middleware\IsAdminMiddleware::class,
+
     ];
 }

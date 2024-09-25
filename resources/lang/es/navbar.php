@@ -8,16 +8,14 @@ return [
     'stock' => 'Existencias',
     'stock_add' => 'Añadir existencias',
     'create_instrument' => 'Crear Instrumento',
-    'list_instruments' => 'Listar Instrumentos',
+    'list_instruments' => 'Instrumentos',
     'insert_instrument' => 'Insertar Instrumento',
     'stock_entries' => 'Últimas Entradas de Existencias',
     'stock_details' => 'Detalles de la Entrada de Existencias',
     'create_review' => 'Crear Reseña',
-<<<<<<< HEAD
-    'list_lessons' => 'Listado de lecciones',
-=======
-    'list_lessons' => 'Listar lecciones',
->>>>>>> sintax-refactoring
-    'list_orders' => 'Listar órdenes',
+    'list_lessons' => 'lecciones',
+    'list_orders' => 'Órdenes',
+    'create_lesson' => 'Crear lección',
     'cart' => 'Carrito',
+    'admin_subtitle' => 'Centro de administrador',
 ];

@@ -24,7 +24,7 @@
                     </ul>
                     @endif
 
-                    <form action="{{ route('instrument.save') }}" method="POST" enctype="multipart/form-data">
+                    <form action="{{ route('admin.instrument.save') }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="name" class="form-label">{{ __('attributes.name') }}</label>

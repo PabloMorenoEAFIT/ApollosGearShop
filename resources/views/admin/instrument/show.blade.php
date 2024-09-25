@@ -6,7 +6,7 @@
 @section('content')
 <div class="card mb-3">
     <div class="row g-0">
-        <div class="col-md-4">
+    <div class="col-md-4">
             {{-- 
                 <img src="{{ $viewData['instrument']->getImage() }}" class="card-img-top img-card" alt="Instrument Image">
             --}}
@@ -60,10 +60,20 @@
                 @include('review.show', ['viewData' => $viewData])
 
             </div>
-                @csrf
+
+            <!-- Card Footer with Delete Button -->
+            <div class="card-footer text-muted text-center">
+                <!-- Delete Form -->
+                <form action="{{ route('admin.instrument.delete', $viewData['instrument']->getId()) }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
+                </form>
+
                 <!-- Include Add to Cart Form for Instruments -->
                 @include('cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument'])
-            </div> 
+
+            </div>
         </div>
     </div>
 </div>

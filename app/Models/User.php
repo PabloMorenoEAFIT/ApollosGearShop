@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'group',
+        'is_admin',
     ];
 
     /**
@@ -63,4 +64,8 @@ class User extends Authenticatable
         return $this->hasMany(Review::class);
     }
 
+    public function getIsAdmin(): bool
+    {
+        return $this->attributes['is_admin'];
+    }
 }

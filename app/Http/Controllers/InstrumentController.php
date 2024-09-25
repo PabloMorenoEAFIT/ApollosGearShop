@@ -6,10 +6,10 @@ use App\Models\Instrument;
 use App\Services\ImageService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Illuminate\Support\Collection;
 
 class InstrumentController extends Controller
 {
@@ -52,19 +52,8 @@ class InstrumentController extends Controller
         $allCategories = Instrument::pluck('category')->unique();
 
         return $allCategories->mapWithKeys(function ($category) {
-            return [$category => __('attributes.categories.' . $category)];
+            return [$category => __('attributes.categories.'.$category)];
         });
-    }
-
-    public function create(): View
-    {
-        $viewData = [
-            'title' => __('navbar.create_instrument'),
-            'subtitle' => __('navbar.create_instrument'),
-            'categories' => $this->getCategories(),
-        ];
-
-        return view('instrument.create')->with('viewData', $viewData);
     }
 
     public function show(string $id, Request $request): View|RedirectResponse
@@ -80,29 +69,5 @@ class InstrumentController extends Controller
         ];
 
         return view('instrument.show')->with('viewData', $viewData);
-    }
-
-    public function save(Request $request): RedirectResponse
-    {
-        $instrument = new Instrument;
-        $imagePath = $this->imageService->store($request);
-        Instrument::createInstrument($request->all(), $imagePath);
-
-        $viewData['message'] = __('messages.created');
-
-        return redirect()->route('instrument.index')->with('message', $viewData['message']);
-    }
-
-    public function delete(int $id): RedirectResponse
-    {
-        try {
-            $instrument = Instrument::findOrFail($id);
-            $instrument->delete();
-            $viewData['message'] = __('messages.deleted');
-        } catch (\Exception $e) {
-            return redirect()->route('instrument.index')->with('error', __('messages.delete_failed'));
-        }
-
-        return redirect()->route('instrument.index')->with('message', $viewData['message']);
     }
 }

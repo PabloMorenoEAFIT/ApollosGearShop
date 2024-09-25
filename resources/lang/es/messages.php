@@ -18,14 +18,15 @@ return [
     'deleted' => '¡Eliminado exitosamente!',
     'add_review' => 'Agregar Reseña',
     'save' => 'Guardar',
-    'add_to_cart' => 'Añadir al carrito',
-<<<<<<< HEAD
-    'cart' => 'Carrito',
-    'subtitle_cart' => 'Productos seleccionados',
     'lessons' => 'Lecciones',
     'list_lessons' => 'Listado de lecciones',
-    'Success_lessons' => '¡Lección creada satisfactoriamante!',
-    'information_lessons' => 'Información sobre la lección:',
-=======
->>>>>>> sintax-refactoring
+    'Success_lessons' => '¡Lección creada satisfactoriamente!',
+    'information_lessons' => 'Información de lección:',
+    'create_lessons' => 'Crear lección',
+    'add_to_cart' => 'Añadir al carrito',
+    'admin_title' => 'Panel de administrador',
+    'admin_subtitle' => 'Resumen de la página',
+    'stock_title' => 'Existencias',
+    'order_title' => 'Ordenes',
+    'admin_navigate' => 'Navegar',
 ];

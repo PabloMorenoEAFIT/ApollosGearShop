@@ -25,4 +25,10 @@ return [
     'list_lessons' => 'Lessons list',
     'Success_lessons' => 'Lesson Created Succesfully!',
     'information_lessons' => 'Lesson Information:',
+    'create_lessons' => 'Create Lesson',
+    'admin_title' => 'Administrator dashboard',
+    'admin_subtitle' => 'Page summary',
+    'stock_title' => 'Stock',
+    'order_title' => 'Orders',
+    'admin_navigate' => 'Navigate',
 ];

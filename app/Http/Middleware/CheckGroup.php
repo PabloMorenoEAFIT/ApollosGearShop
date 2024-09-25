@@ -20,11 +20,15 @@ class CheckGroup
             return redirect()->route('login')->with('error', 'You must be logged in to access this page.');
         }
 
+        if (Auth::user() && Auth::user()->getIsAdmin() == '1') {
+            return $next($request);
+        }
+
         $user = Auth::user();
         if ($user->group !== $group) {
             return redirect()->route('home.index')->with('error', 'You do not have the required permissions to access this page.');
         }
 
-        return $next($request);
+        // return $next($request);
     }
 }

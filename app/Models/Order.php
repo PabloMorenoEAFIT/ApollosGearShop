@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Validator;
@@ -41,7 +40,6 @@ class Order extends Model
     {
         return $this->attributes['updated_at'];
     }
-
 
     public function getTotalPrice(): int
     {
