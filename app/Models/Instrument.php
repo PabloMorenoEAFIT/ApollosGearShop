@@ -229,7 +229,7 @@ class Instrument extends Model
             'price' => 'required|numeric|min:0',
             'reviewSum' => 'nullable|numeric',
             'numberOfReviews' => 'nullable|integer|min:0',
-            'quantity' => 'nullable|integer|min:1',
+            'quantity' => 'required|integer|min:1',
             'image' => 'file|image|max:10240', //Max 10MB
         ]);
 
@@ -246,9 +246,10 @@ class Instrument extends Model
 
         $instrument = self::create(array_merge($validatedData, ['image' => $imagePath]));
 
+        $quantity = $data['quantity'] ?? 0; // 0 by default
+
         $instrument->stocks()->create([
-            'quantity' => $data['quantity'] ?? 0,
-            'comments' => 'Initial stock',
+            'quantity' => $quantity,
         ]);
 
         return $instrument;

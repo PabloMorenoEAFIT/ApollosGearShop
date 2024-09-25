@@ -18,10 +18,9 @@ return new class extends Migration
             $table->string('category');
             $table->string('brand');
             $table->integer('price');
-            $table->float('reviewSum');
-            $table->integer('numberOfReviews');
-            //Esto en realidad es stock
-            $table->integer('quantity');
+            $table->float('reviewSum')->default(0); // Establece valor por defecto
+            $table->integer('numberOfReviews')->default(0); // Establece valor por defecto
+            $table->integer('quantity')->default(1);
             $table->string('image');
             $table->timestamps();
         });

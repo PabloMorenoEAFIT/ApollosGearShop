@@ -10,13 +10,11 @@ return new class extends Migration
     {
         Schema::create('stock', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('instrument_id'); // Debe coincidir con el tipo de 'instruments.id'
-            $table->integer('quantity');
-            $table->string('comments')->nullable();
-            $table->timestamps();
-
-            // Clave foránea
-            $table->foreign('instrument_id')->references('id')->on('instruments')->onDelete('cascade');
+            $table->integer('quantity'); 
+            $table->string('type')->default(0); 
+            $table->text('comments')->nullable(); 
+            $table->foreignId('instrument_id')->constrained()->onDelete('cascade'); 
+            $table->timestamps(); 
         });
     }
 
@@ -25,5 +23,3 @@ return new class extends Migration
         Schema::dropIfExists('stock');
     }
 };
-
-

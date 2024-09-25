@@ -57,8 +57,8 @@
                         </div>
 
                         <div class="form-group mb-3">
-                            <label for="stock">{{ __('attributes.quantity') }}</label>
-                            <input type="number" id="stock" name="stock" class="form-control" value="{{ old('stock') }}" min="0" required>
+                            <label for="quantity">{{ __('attributes.quantity') }}</label>
+                            <input type="number" id="quantity" name="quantity" class="form-control" value="{{ old('quantity') }}" min="0" required>
                         </div>
                         
                         <div class="mb-3">
