@@ -45,6 +45,9 @@ Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.ind
 Route::post('/cart/add/{id}/{type}', 'App\Http\Controllers\CartController@add')->name('cart.add');
 Route::get('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
 
+Route::get('/order', 'App\Http\Controllers\OrderController@index')->name('order.index');
+Route::post('/checkout',  'App\Http\Controllers\OrderController@checkout')->name('order.checkout');
+Route::get('/order/{id}', 'App\Http\Controllers\OrderController@show')->name('order.show');
 // Admin routes
 Route::middleware([CheckGroup::class.':admin'])->group(function () {
     Route::get('/admin', 'App\Http\Controllers\Admin\DashboardController@index')->name('admin.index');

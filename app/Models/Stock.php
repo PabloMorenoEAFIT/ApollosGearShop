@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -17,31 +18,26 @@ class Stock extends Model
      * STOCK ATTRIBUTES
      *
      * $this->attributes['id'] - int - contains the unique identifier for the stock entry
-     *
      * $this->attributes['quantity'] - int - contains the quantity of the instrument in stock
-     *
      * $this->attributes['type'] - string - contains the type of stock movement or status (e.g., 'initial', 'purchased', 'returned')
-     *
      * $this->attributes['comments'] - string - contains any additional comments about the stock entry
-     *
      * $this->attributes['instrument_id'] - int - contains the ID of the related instrument
-     *
      * $this->attributes['created_at'] - string - contains the creation timestamp of the stock record
-     *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the stock record
+     * 
+     * RELATIONSHIPS
+     * 
+     * Instrument - belongsTo
      */
-    protected $table = 'stock';
 
     protected $guarded = [];
 
-    /* ---- RELATIONSHIPS ----*/
+    /* ---- GETTERS & SETTERS ----*/
 
-    public function instrument()
+    public function getInstrument(): BelongsTo
     {
         return $this->belongsTo(Instrument::class, 'instrument_id');
     }
-
-    /* ---- GETTERS & SETTERS ----*/
 
     public function getId(): int
     {

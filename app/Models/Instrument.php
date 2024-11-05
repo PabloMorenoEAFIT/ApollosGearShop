@@ -16,46 +16,51 @@ class Instrument extends Model
      * INSTRUMENT ATTRIBUTES
      *
      * $this->attributes['id'] - int - contains the unique identifier for the instrument
-     *
      * $this->attributes['name'] - string - contains the instrument name
-     *
      * $this->attributes['description'] - string - contains a description of the instrument
-     *
      * $this->attributes['category'] - string - contains the category of the instrument
-     *
      * $this->attributes['brand'] - string - contains the brand of the instrument
-     *
      * $this->attributes['price'] - int - contains the instrument price
-     *
-     * $this->attributes['reviewSum'] - float - contains the total sum of reviews for the instrument
-     *
-     * $this->attributes['numberOfReviews'] - int - contains the number of reviews for the instrument
-     *
      * $this->attributes['quantity'] - int - contains the quantity in stock for the instrument
-     *
+     * $this->attributes['reviewSum'] - float - contains the total sum of reviews for the instrument
+     * $this->attributes['numberOfReviews'] - int - contains the number of reviews for the instrument
      * $this->attributes['image'] - string - contains the URL or path to the image of the instrument
-     *
      * $this->attributes['created_at'] - string - contains the creation timestamp of the instrument record
-     *
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the instrument record
+     * 
+     * RELATIONSHIPS
+     * 
+     * Stock - hasMany 
+     * Review - hasMany 
+     * ItemInOrder - hasMany 
      */
-    protected $table = 'instruments';
 
-    protected $guarded = [];
-
-    /* ---- RELATIONSHIPS ----*/
-
-    public function stocks(): HasMany
+    public function stocks() : HasMany
     {
         return $this->hasMany(Stock::class, 'instrument_id');
     }
-
-    public function reviews(): HasMany
+    
+     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'instrument_id');
     }
 
     /* ---- GETTERS & SETTERS ----*/
+
+    public function getStocks(): HasMany
+    {
+        return $this->hasMany(Stock::class, 'instrument_id');
+    }
+    
+    public function getReviews(): HasMany
+    {
+        return $this->hasMany(Review::class, 'instrument_id');
+    }
+
+    public function getItemInOrder(): HasMany
+    {
+        return $this->hasMany(ItemInOrder::class, 'instrument_id');
+    }
 
     public function getId(): int
     {
@@ -67,19 +72,9 @@ class Instrument extends Model
         return $this->attributes['name'];
     }
 
-    public function setName(string $name): void
-    {
-        $this->attributes['name'] = $name;
-    }
-
     public function getDescription(): string
     {
         return $this->attributes['description'];
-    }
-
-    public function setDescription(string $description): void
-    {
-        $this->attributes['description'] = $description;
     }
 
     public function getCategory(): string
@@ -87,29 +82,14 @@ class Instrument extends Model
         return $this->attributes['category'];
     }
 
-    public function setCategory(string $category): void
-    {
-        $this->attributes['category'] = $category;
-    }
-
     public function getBrand(): string
     {
         return $this->attributes['brand'];
     }
 
-    public function setBrand(string $brand): void
-    {
-        $this->attributes['brand'] = $brand;
-    }
-
     public function getPrice(): int
     {
         return $this->attributes['price'];
-    }
-
-    public function setPrice(int $price): void
-    {
-        $this->attributes['price'] = $price;
     }
 
     public function getReviewSum(): float
@@ -121,35 +101,19 @@ class Instrument extends Model
         return $this->attributes['reviewSum'] / $this->attributes['numberOfReviews'];
     }
 
-    public function setReviewSum(float $review): void
-    {
-        $this->attributes['reviewSum'] += $review;
-    }
-
     public function getNumberOfReviews(): int
     {
         return $this->attributes['numberOfReviews'];
     }
 
-    public function setNumberOfReviews(): void
-    {
-        $this->attributes['numberOfReviews'] += 1;
-    }
-
     public function getQuantity(): int
     {
-        return $this->stocks()->latest('created_at')->value('quantity') ?? 0;
-
+        return $this->getStocks()->latest('created_at')->value('quantity') ?? 0;
     }
 
     public function getImage(): string
     {
         return $this->attributes['image'];
-    }
-
-    public function setImage(string $image): void
-    {
-        $this->attributes['image'] = $image;
     }
 
     public function getCreatedAt(): string
@@ -160,6 +124,46 @@ class Instrument extends Model
     public function getUpdatedAt(): string
     {
         return $this->attributes['updated_at'];
+    }
+
+    public function setName(string $name): void
+    {
+        $this->attributes['name'] = $name;
+    }
+
+    public function setDescription(string $description): void
+    {
+        $this->attributes['description'] = $description;
+    }
+
+    public function setCategory(string $category): void
+    {
+        $this->attributes['category'] = $category;
+    }
+
+    public function setBrand(string $brand): void
+    {
+        $this->attributes['brand'] = $brand;
+    }
+
+    public function setPrice(int $price): void
+    {
+        $this->attributes['price'] = $price;
+    }
+
+    public function setReviewSum(float $review): void
+    {
+        $this->attributes['reviewSum'] += $review;
+    }
+
+    public function setNumberOfReviews(): void
+    {
+        $this->attributes['numberOfReviews'] += 1;
+    }
+
+    public function setImage(string $image): void
+    {
+        $this->attributes['image'] = $image;
     }
 
     /* ---- CUSTOM METHODS ----*/
@@ -248,7 +252,7 @@ class Instrument extends Model
 
         $quantity = $data['quantity'] ?? 0; // 0 by default
 
-        $instrument->stocks()->create([
+        $instrument->getStocks()->create([
             'quantity' => $quantity,
         ]);
 

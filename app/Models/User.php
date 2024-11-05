@@ -6,47 +6,64 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-
-    /*USER ATTRIBUTES
-
-    $this->attributes['name'] - string - contains the user name
-    $this->attributes['email'] - string - contains the user email
-    $this->attributes['password'] - string - contains the user password
-    */
+    
+    /**
+     * USER ATTRIBUTES
+     * 
+     * $this->attributes['id'] - int - contains the user primary key (id)
+     * $this->attributes['name'] - string - contains the user name
+     * $this->attributes['email'] - string - contains the user email
+     * $this->attributes['password'] - string - contains the user password
+     * $this->attributes['role'] - string - contains the user role
+     * 
+     * RELATIONSHIPS
+     * 
+     * Review - hasMany
+     * Order - hasMany
+     */
 
     protected $fillable = [
         'name',
         'email',
         'password',
-        'group',
-        'is_admin',
+        'role',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
+ 
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+
+    // GETTERS & SETTERS
+
+    public function getReviews(): HasMany
+    {
+        return $this->hasMany(Review::class);
+    }
+
+    public function getOrders(): HasMany
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    public function getId(): int
+    {
+        return $this->attributes['id'];
     }
 
     public function getName(): string
@@ -59,13 +76,35 @@ class User extends Authenticatable
         return $this->attributes['email'];
     }
 
-    public function reviews()
+    public function getRole(): string
     {
-        return $this->hasMany(Review::class);
+        return $this->attributes['role'];
     }
 
-    public function getIsAdmin(): bool
+    public function setName(string $name): void
     {
-        return $this->attributes['is_admin'];
+        $this->attributes['name'] = $name;
     }
+
+    public function setEmail(string $email): void
+    {
+        $this->attributes['email'] = $email;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->attributes['password'] = $password;
+    }
+
+    public function setRole(string $role): void
+    {
+        $this->attributes['role'] = $role;
+    }
+
+    public function setIsAdmin(bool $isAdmin): void
+    {
+        $this->attributes['is_admin'] = $isAdmin;
+    }
+
+
 }

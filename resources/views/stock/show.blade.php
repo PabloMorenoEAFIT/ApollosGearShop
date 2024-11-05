@@ -54,7 +54,7 @@
         </div>
 
         <!-- Update stock functionalities -->
-        @include('stock.update', ['viewData' => $viewData])
+        @include('components.update_stock', ['viewData' => $viewData])
 
     </div>
     @endsection

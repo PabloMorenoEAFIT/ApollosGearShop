@@ -57,7 +57,7 @@
                 </table>
 
                 <!-- Show instrument reviews -->
-                @include('review.show', ['viewData' => $viewData])
+                @include('components.review_list', ['viewData' => $viewData])
 
             </div>
                 @csrf

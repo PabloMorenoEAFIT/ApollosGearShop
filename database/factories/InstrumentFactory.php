@@ -34,6 +34,7 @@ class InstrumentFactory extends Factory
             'price' => $this->faker->numberBetween(10000, 5000000),
             'reviewSum' => $this->faker->randomFloat(2, 1, 5) * $numberOfReviews,
             'numberOfReviews' => $numberOfReviews,
+            'quantity' => $this->faker->numberBetween(1, 20),
             'image' => $this->faker->imageUrl(640, 480, 'instruments'),
             'created_at' => $this->faker->dateTimeThisDecade,
             'updated_at' => $this->faker->dateTimeThisDecade,

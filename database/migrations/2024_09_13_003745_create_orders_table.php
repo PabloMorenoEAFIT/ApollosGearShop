@@ -16,6 +16,7 @@ return new class extends Migration
             $table->date('creationDate');
             $table->date('deliveryDate');
             $table->integer('totalPrice');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade'); 
             $table->timestamps();
         });
     }
