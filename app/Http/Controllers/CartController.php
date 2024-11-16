@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instrument;
-use App\Models\Lesson;
 use App\Util\CartUtils;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,12 +25,12 @@ class CartController extends Controller
 
     public function add(Request $request, int $id, string $type): RedirectResponse
     {
-        if (!CartUtils::isValidProductType($type)) {
+        if (! CartUtils::isValidProductType($type)) {
             return redirect()->back()->withErrors('Invalid product type.');
         }
 
         $product = CartUtils::getProductById($id, $type);
-        if (!$product) {
+        if (! $product) {
             return redirect()->back()->withErrors('Product not found.');
         }
 

@@ -2,17 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\View\View;
-use Illuminate\Support\Facades\Validator;
-use App\Models\ItemInOrder;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Session;
-use App\Models\User;
-use App\Models\Lesson;
 use App\Models\Instrument;
+use App\Models\ItemInOrder;
+use App\Models\Lesson;
+use App\Models\Order;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class OrderController extends Controller
 {
@@ -45,22 +43,22 @@ class OrderController extends Controller
         $itemInOrders = [];
 
         foreach ($cartItems as $item) {
-            if($item['type'] == "Lesson"){
+            if ($item['type'] == 'Lesson') {
                 $quantity = 1;
-            }else{
+            } else {
                 $quantity = $item['quantity'];
             }
             $productData = $item['product'];
 
-            $product = $item['type'] == "Lesson"
+            $product = $item['type'] == 'Lesson'
                 ? Lesson::find($productData['id'])
                 : Instrument::find($productData['id']);
 
-            if (!$product) {
-                return redirect()->back()->withErrors("Product not found.");
+            if (! $product) {
+                return redirect()->back()->withErrors('Product not found.');
             }
 
-            if ($item['type'] == "Lesson") {
+            if ($item['type'] == 'Lesson') {
                 $availableQuantity = 1;
             } else {
                 $availableQuantity = $product->getQuantity();
@@ -72,27 +70,27 @@ class OrderController extends Controller
 
             if ($quantity > $availableQuantity) {
                 return redirect()->back()->withErrors([
-                    'quantity' => 'Requested quantity exceeds available stock for ' . $productName
+                    'quantity' => 'Requested quantity exceeds available stock for '.$productName,
                 ]);
             }
 
             // Lower stock for instruments
-            if ($item['type'] != "Lesson") {
+            if ($item['type'] != 'Lesson') {
                 try {
-                    $product->getStocks()->latest()->first()->lowerStock($quantity, "Order checkout");
+                    $product->getStocks()->latest()->first()->lowerStock($quantity, 'Order checkout');
                 } catch (InvalidArgumentException $e) {
                     return redirect()->back()->withErrors([
-                        'quantity' => 'Error updating stock for ' . $productName . ': ' . $e->getMessage()
+                        'quantity' => 'Error updating stock for '.$productName.': '.$e->getMessage(),
                     ]);
                 }
             }
 
             $itemInOrder = new ItemInOrder([
-                'type' => $item['type'] == "Lesson" ? 'lesson' : 'instrument',
+                'type' => $item['type'] == 'Lesson' ? 'lesson' : 'instrument',
                 'quantity' => $quantity,
                 'price' => $price,
-                'instrument_id' =>$item['type'] != "Lesson" ? $productData['id'] : null,
-                'lesson_id' => $item['type'] == "Lesson" ? $productData['id'] : null,
+                'instrument_id' => $item['type'] != 'Lesson' ? $productData['id'] : null,
+                'lesson_id' => $item['type'] == 'Lesson' ? $productData['id'] : null,
             ]);
             $itemInOrders[] = $itemInOrder;
         }
@@ -101,7 +99,7 @@ class OrderController extends Controller
             return redirect()->back()->withErrors('Invalid total amount.');
         }
 
-        $order = new Order();
+        $order = new Order;
         $order->creationDate = now();
         $order->deliveryDate = now()->addDays(7);
         $order->totalPrice = $total;
@@ -115,9 +113,8 @@ class OrderController extends Controller
 
         $request->session()->forget('cart_items');
 
-        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $' . number_format($total / 100, 2));
+        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
     }
-
 
     public function show(int $id): View
     {
@@ -128,10 +125,9 @@ class OrderController extends Controller
             $item->price = $item->getPrice() * $item->getQuantity();
         }
 
-
         $viewData = [
             'title' => 'Order Details',
-            'subtitle' => 'Order ID: ' . $order->getId(),
+            'subtitle' => 'Order ID: '.$order->getId(),
             'order' => $order,
             'items' => $items,
         ];

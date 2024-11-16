@@ -18,19 +18,17 @@ class Review extends Model
      * $this->attributes['instrument_id'] - int - contains the id of the instrument being reviewed
      * $this->attributes['created_at'] - string - contains the creation timestamp of the review record
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the review record
-     * 
+     *
      * RELATIONSHIPS
-     * 
-     * user - belongsTo 
+     *
+     * user - belongsTo
      * instrument - belongsTo
      */
-
     protected $fillable = ['score', 'description', 'user_id', 'instrument_id'];
-
 
     public function instrument(): BelongsTo
     {
-        return $this->belongsTo(Instrument::class, 'instrument_id'); 
+        return $this->belongsTo(Instrument::class, 'instrument_id');
     }
 
     public function user(): BelongsTo

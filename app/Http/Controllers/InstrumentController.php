@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Instrument;
 use App\Services\ImageService;
+use App\Util\Arrays;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use App\Util\Arrays;
 
 class InstrumentController extends Controller
 {

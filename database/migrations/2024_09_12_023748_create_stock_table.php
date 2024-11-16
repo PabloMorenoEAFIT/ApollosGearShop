@@ -10,11 +10,11 @@ return new class extends Migration
     {
         Schema::create('stocks', function (Blueprint $table) {
             $table->id();
-            $table->integer('quantity'); 
-            $table->string('type')->default(0); 
-            $table->text('comments')->nullable(); 
-            $table->foreignId('instrument_id')->constrained()->onDelete('cascade'); 
-            $table->timestamps(); 
+            $table->integer('quantity');
+            $table->string('type')->default(0);
+            $table->text('comments')->nullable();
+            $table->foreignId('instrument_id')->constrained()->onDelete('cascade');
+            $table->timestamps();
         });
     }
 

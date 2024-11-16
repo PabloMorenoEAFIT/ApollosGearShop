@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section("title", $viewData["title"])
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="create-order-container container">
     <div class="row justify-content-center">
         <div class="col-md-8">

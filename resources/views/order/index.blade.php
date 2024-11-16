@@ -8,7 +8,7 @@
         {{ session('success') }}
     </div>
 @endif
-
+{{ Breadcrumbs::render() }}
 <div class="row">
     @foreach ($viewData["orders"] as $order)
     <div class="col-md-4 col-lg-3 mb-2">

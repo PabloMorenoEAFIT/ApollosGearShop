@@ -4,6 +4,7 @@
 @section('subtitle', $viewData["subtitle"])
 
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="container">
     <h1>{{ $viewData['subtitle'] }}</h1>
     @if(count($viewData['cartProducts']) > 0)

@@ -24,12 +24,11 @@ class Stock extends Model
      * $this->attributes['instrument_id'] - int - contains the ID of the related instrument
      * $this->attributes['created_at'] - string - contains the creation timestamp of the stock record
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the stock record
-     * 
+     *
      * RELATIONSHIPS
-     * 
+     *
      * Instrument - belongsTo
      */
-
     protected $guarded = [];
 
     /* ---- GETTERS & SETTERS ----*/

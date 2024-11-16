@@ -4,29 +4,28 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
-    
+
     /**
      * USER ATTRIBUTES
-     * 
+     *
      * $this->attributes['id'] - int - contains the user primary key (id)
      * $this->attributes['name'] - string - contains the user name
      * $this->attributes['email'] - string - contains the user email
      * $this->attributes['password'] - string - contains the user password
      * $this->attributes['role'] - string - contains the user role
-     * 
+     *
      * RELATIONSHIPS
-     * 
+     *
      * Review - hasMany
      * Order - hasMany
      */
-
     protected $fillable = [
         'name',
         'email',
@@ -34,7 +33,6 @@ class User extends Authenticatable
         'role',
     ];
 
- 
     protected $hidden = [
         'password',
         'remember_token',
@@ -47,7 +45,6 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
 
     // GETTERS & SETTERS
 
@@ -105,6 +102,4 @@ class User extends Authenticatable
     {
         $this->attributes['is_admin'] = $isAdmin;
     }
-
-
 }

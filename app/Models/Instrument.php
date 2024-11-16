@@ -27,20 +27,19 @@ class Instrument extends Model
      * $this->attributes['image'] - string - contains the URL or path to the image of the instrument
      * $this->attributes['created_at'] - string - contains the creation timestamp of the instrument record
      * $this->attributes['updated_at'] - string - contains the last update timestamp of the instrument record
-     * 
+     *
      * RELATIONSHIPS
-     * 
-     * Stock - hasMany 
-     * Review - hasMany 
-     * ItemInOrder - hasMany 
+     *
+     * Stock - hasMany
+     * Review - hasMany
+     * ItemInOrder - hasMany
      */
-
-    public function stocks() : HasMany
+    public function stocks(): HasMany
     {
         return $this->hasMany(Stock::class, 'instrument_id');
     }
-    
-     public function reviews(): HasMany
+
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class, 'instrument_id');
     }
@@ -51,7 +50,7 @@ class Instrument extends Model
     {
         return $this->hasMany(Stock::class, 'instrument_id');
     }
-    
+
     public function getReviews(): HasMany
     {
         return $this->hasMany(Review::class, 'instrument_id');

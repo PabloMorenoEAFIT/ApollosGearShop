@@ -4,6 +4,7 @@
 @section('subtitle', $viewData["subtitle"])
 
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
@@ -57,12 +58,12 @@
                 </table>
 
                 <!-- Show instrument reviews -->
-                @include('components.review_list', ['viewData' => $viewData])
+                @include('components.review.review_list', ['viewData' => $viewData])
 
             </div>
                 @csrf
                 <!-- Include Add to Cart Form for Instruments -->
-                @include('cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument'])
+                @include('components.cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument'])
             </div> 
         </div>
     </div>

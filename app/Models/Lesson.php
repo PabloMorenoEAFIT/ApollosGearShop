@@ -4,8 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 
 class Lesson extends Model
@@ -24,13 +24,11 @@ class Lesson extends Model
      * $this->attributes['location'] - string - contains the lesson location
      * $this->attributes['price'] - int - contains the lesson price
      * $this->attributes['teacher'] - string - contains the teacher of the lesson
-     * 
+     *
      * RELATIONSHIPS
-     * 
-     * ItemInOrder - hasMany 
+     *
+     * ItemInOrder - hasMany
      */
-
-
     protected $fillable = [
         'name', 'description', 'difficulty', 'schedule', 'totalHours',
         'location', 'price', 'teacher',

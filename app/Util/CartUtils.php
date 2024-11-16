@@ -60,7 +60,7 @@ class CartUtils
                         'type' => 'Instrument',
                         'product' => $product,
                         'quantity' => $item['quantity'],
-                        'available_quantity' => $product->getQuantity(), 
+                        'available_quantity' => $product->getQuantity(),
                     ];
                 }
             } elseif ($item['type'] === 'Lesson') {

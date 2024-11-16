@@ -57,7 +57,7 @@
                 </table>
 
                 <!-- Show instrument reviews -->
-                @include('components.review_list', ['viewData' => $viewData])
+                @include('components.review.review_list', ['viewData' => $viewData])
 
             </div>
 
