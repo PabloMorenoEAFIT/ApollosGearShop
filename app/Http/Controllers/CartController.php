@@ -25,7 +25,7 @@ class CartController extends Controller
 
     public function add(Request $request, int $id, string $type): RedirectResponse
     {
-        if (! CartUtils::isValidProductType($type)) {
+        if (!CartUtils::isValidProductType($type)) {
             return redirect()->back()->withErrors('Invalid product type.');
         }
 
@@ -43,6 +43,21 @@ class CartController extends Controller
 
         return redirect()->route('cart.index')->with('message', 'Item added to cart!');
     }
+
+    public function removeItem(Request $request, int $id, string $type): RedirectResponse
+    {
+        $cartItems = $request->session()->get('cart_items', []);
+        $index = CartUtils::findCartItem($cartItems, $id, $type);
+    
+        if ($index !== null) {
+            unset($cartItems[$index]); 
+            $cartItems = array_values($cartItems); // Reindex the array
+            $request->session()->put('cart_items', $cartItems); // Save the updated cart back to the session
+        }
+    
+        return redirect()->route('cart.index')->with('message', 'Item removed from cart!');
+    }
+    
 
     public function removeAll(Request $request): RedirectResponse
     {

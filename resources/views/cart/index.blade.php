@@ -4,6 +4,12 @@
 @section('subtitle', $viewData["subtitle"])
 
 @section('content')
+<div class="text-info text-center">
+    @if (isset($viewData["message"]) && $viewData["message"])
+        <h2>{{ $viewData["message"] }}</h2>
+    @endif
+</div>
+
 {{ Breadcrumbs::render() }}
 <div class="container">
     <h1>{{ $viewData['subtitle'] }}</h1>
@@ -18,14 +24,23 @@
                 <strong>Lesson:</strong> {{ $item['product']->getName() }} - {{ $item['product']->getFormattedPrice() }}
                 @endif
             </div>
-            @if($item['type'] === 'Instrument')
-            <form action="{{ route('cart.add', ['id' => $item['product']->id, 'type' => 'Instrument']) }}" method="POST" class="d-inline">
-                @csrf
-                <div class="input-group" style="width: 120px;">
-                    <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['product']->getQuantity() }}" required class="form-control">
-                </div>
-            </form>
-            @endif
+
+            <div class="d-flex align-items-center">
+                @if($item['type'] === 'Instrument')
+                <form action="{{ route('cart.add', ['id' => $item['product']->id, 'type' => 'Instrument']) }}" method="POST" class="d-inline">
+                    @csrf
+                    <div class="input-group" style="width: 120px;">
+                        <input type="number" name="quantity" value="{{ $item['quantity'] }}" min="1" max="{{ $item['product']->getQuantity() }}" required class="form-control">
+                    </div>
+                </form>
+                @endif
+
+                <form action="{{ route('cart.removeItem', ['id' => $item['product']->id, 'type' => $item['type']]) }}" method="POST" class="d-inline ms-2">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger btn-sm">X</button>
+                </form>
+            </div>
         </li>
         @endforeach
     </ul>
@@ -33,13 +48,17 @@
         <form action="{{ route('order.checkout') }}" method="POST">
             @csrf
             <input type="hidden" name="cart_items" value="{{ json_encode($viewData['cartProducts']) }}">
-            <button type="submit" class="btn btn-primary">Checkout</button>
+            <button type="submit" class="btn btn-primary"> __('cart.checkout')</button>
         </form>
 
-        <a class="btn btn-danger mx-2" href="{{ route('cart.removeAll') }}">{{ __('attributes.remove_All') }}</a>
+        <form action="{{ route('cart.removeAll') }}" method="POST" class="d-inline">
+            @csrf
+            @method('DELETE')
+            <button type="submit" class="btn btn-danger mx-2">{{ __('attributes.remove_All') }}</button>
+        </form>
     </div>
     @else
-    <p>Your cart is empty.</p>
+    <p> __('cart.empty_cart')</p>
     @endif
 </div>
 @endsection

@@ -45,7 +45,7 @@ class InstrumentController extends Controller
             'subtitle' => Str::limit($instrument['name'].' - instrument information', 50),
             'instrument' => $instrument,
             'category' => __('attributes.categories.'.$instrument->getCategory()),
-            'reviews' => $instrument->reviews,
+            'reviews' => $instrument->getReviews(),
         ];
 
         return view('instrument.show')->with('viewData', $viewData);

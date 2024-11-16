@@ -2,15 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Instrument;
-use App\Models\ItemInOrder;
-use App\Models\Lesson;
-use App\Models\Order;
 use App\Models\User;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Order;
+use App\Util\OrderUtils;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class OrderController extends Controller
 {
@@ -29,6 +28,10 @@ class OrderController extends Controller
     {
         $cartItems = $request->session()->get('cart_items', []);
 
+        if (!OrderUtils::validateSessionItems($cartItems)) {
+            return redirect()->back()->withErrors('Invalid cart items format.');
+        }
+        
         $validator = Validator::make($request->all(), [
             'cart_items' => 'required|json',
         ]);
@@ -36,84 +39,26 @@ class OrderController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
-
+        // Decode cart items
         $cartItems = json_decode($request->input('cart_items'), true) ?? $cartItems;
 
-        $total = 0;
-        $itemInOrders = [];
-
-        foreach ($cartItems as $item) {
-            if ($item['type'] == 'Lesson') {
-                $quantity = 1;
-            } else {
-                $quantity = $item['quantity'];
-            }
-            $productData = $item['product'];
-
-            $product = $item['type'] == 'Lesson'
-                ? Lesson::find($productData['id'])
-                : Instrument::find($productData['id']);
-
-            if (! $product) {
-                return redirect()->back()->withErrors('Product not found.');
-            }
-
-            if ($item['type'] == 'Lesson') {
-                $availableQuantity = 1;
-            } else {
-                $availableQuantity = $product->getQuantity();
-            }
-            $price = $productData['price'];
-            $productName = $productData['name'];
-
-            $total += $price * $quantity;
-
-            if ($quantity > $availableQuantity) {
-                return redirect()->back()->withErrors([
-                    'quantity' => 'Requested quantity exceeds available stock for '.$productName,
-                ]);
-            }
-
-            // Lower stock for instruments
-            if ($item['type'] != 'Lesson') {
-                try {
-                    $product->getStocks()->latest()->first()->lowerStock($quantity, 'Order checkout');
-                } catch (InvalidArgumentException $e) {
-                    return redirect()->back()->withErrors([
-                        'quantity' => 'Error updating stock for '.$productName.': '.$e->getMessage(),
-                    ]);
-                }
-            }
-
-            $itemInOrder = new ItemInOrder([
-                'type' => $item['type'] == 'Lesson' ? 'lesson' : 'instrument',
-                'quantity' => $quantity,
-                'price' => $price,
-                'instrument_id' => $item['type'] != 'Lesson' ? $productData['id'] : null,
-                'lesson_id' => $item['type'] == 'Lesson' ? $productData['id'] : null,
-            ]);
-            $itemInOrders[] = $itemInOrder;
+        try {
+            $result = OrderUtils::processCheckoutItems($cartItems);
+            $itemInOrders = $result['itemInOrders'];
+            $total = $result['total'];
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->withErrors($e->getMessage());
         }
-
+        
         if ($total <= 0) {
             return redirect()->back()->withErrors('Invalid total amount.');
         }
-
-        $order = new Order;
-        $order->creationDate = now();
-        $order->deliveryDate = now()->addDays(7);
-        $order->totalPrice = $total;
-        $order->user_id = User::find(auth()->id())->getId();
-        $order->save();
-
-        foreach ($itemInOrders as $itemInOrder) {
-            $itemInOrder->order_id = $order->id;
-            $itemInOrder->save();
-        }
+        
+        $order = OrderUtils::createOrder($total, $itemInOrders, auth()->id());
 
         $request->session()->forget('cart_items');
 
-        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
+        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $' . number_format($total / 100, 2));
     }
 
     public function show(int $id): View
@@ -134,4 +79,16 @@ class OrderController extends Controller
 
         return view('order.show')->with('viewData', $viewData);
     }
+
+    public function delete(int $id): RedirectResponse
+    {
+        $order = Order::findOrFail($id);
+   
+        OrderUtils::restoreStock($order);
+
+        $order->delete();
+
+        return redirect()->route('order.index')->with('message', 'Order deleted successfully.');
+    }
+
 }

@@ -201,11 +201,9 @@ class Instrument extends Model
         if (! empty($filters['category'])) {
             $query->where('category', $filters['category']);
         }
-
         if (! empty($filters['rating'])) {
-            $query->where('reviewSum', '>=', $filters['rating']);
+            $query->whereRaw('reviewSum / numberOfReviews >= ?', [$filters['rating']]);
         }
-
         if (! empty($filters['filterOrder'])) {
             $this->applySorting($query, $filters['filterOrder']);
         }

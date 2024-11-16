@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'welcome' => '¡¡¡Bienvenido a Apollo\'s Gear Shop!!!',
+    'welcome' => 'Donde los músicos encuentran todo lo que necesitan',
     'title' => 'Página de inicio - Tienda en línea',
     'subtitle' => 'Donde los músicos encuentran todo lo que necesitan',
     'details' => 'Ver detalles',

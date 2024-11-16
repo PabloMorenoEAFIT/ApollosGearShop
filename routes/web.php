@@ -43,7 +43,8 @@ Route::post('/instruments/{id}/save-review', 'App\Http\Controllers\ReviewControl
 // cart routes
 Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.index');
 Route::post('/cart/add/{id}/{type}', 'App\Http\Controllers\CartController@add')->name('cart.add');
-Route::get('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
+Route::delete('/cart/remove-item/{id}/{type}', 'App\Http\Controllers\CartController@removeItem')->name('cart.removeItem');
+Route::delete('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
 
 Route::get('/order', 'App\Http\Controllers\OrderController@index')->name('order.index');
 Route::post('/checkout', 'App\Http\Controllers\OrderController@checkout')->name('order.checkout');

@@ -28,7 +28,7 @@ return [
         'price' => 'Ingresa el precio',
         'quantity' => 'Ingresa la cantidad',
         'type' => 'Ingresa el tipo',
-        'comments' => 'Ingresa los comentarios',
+        'comments' => 'Por comentarios',
         'rating' => 'Ingresa la calificación (1-5)',
         'ascending' => 'Ascendente',
         'descending' => 'Descendente',

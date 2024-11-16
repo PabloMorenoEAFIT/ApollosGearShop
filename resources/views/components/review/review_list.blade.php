@@ -7,17 +7,18 @@
             <a href="{{ route('review.create', $viewData['instrument']->getId())}}" class="btn btn-primary">{{ __('messages.add_review') }}</a>
         </div>
     </div>
-    @if (isset($viewData['reviews']) && count($viewData['reviews']) > 0)
-    <ul class="list-group">
-        @foreach ($viewData['reviews'] as $review)
-        <li class="list-group-item">
-            <strong>{{ $review->user->getName() }}</strong>
-            <p>Score: {{ $review->getScore() }} / 5</p>
-            <p>{{ $review->getDescription()}}</p>
-        </li>
-        @endforeach
-    </ul>
+    @if (!$viewData['instrument']->getReviews()->get()->isEmpty())
+        <ul class="list-group">
+            @foreach ($viewData['instrument']->getReviews as $review)
+            <li class="list-group-item">
+                <strong>{{ $review->user->getName() }}</strong>
+                <p>Score: {{ $review->getScore() }} / 5</p>
+                <p>{{ $review->getDescription() }}</p>
+            </li>
+            @endforeach
+        </ul>
     @else
-    <p>{{ __('attributes.no_reviews') }}</p>
+        <p>{{ __('attributes.no_reviews') }}</p>
     @endif
+
 </div>

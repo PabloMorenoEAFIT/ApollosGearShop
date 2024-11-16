@@ -36,7 +36,7 @@ class CartUtils
         $existingItemKey = self::findCartItem($cartItems, $id, $type);
 
         if ($existingItemKey !== null) {
-            $cartItems[$existingItemKey]['quantity'] = $quantity;
+            $cartItems[$existingItemKey]['quantity'] += $quantity;
         } else {
             $cartItems[] = [
                 'id' => $id,
