@@ -17,6 +17,7 @@ class Order extends Model
      * ORDER ATTRIBUTES
 
      * $this->attributes['id'] - int - contains the order primary key (id)
+     * $this->attributes['user_id'] - int - contains the user id of the order
      * $this->attributes['creationDate'] - date - contains the creation date of the order
      * $this->attributes['deliveryDate'] - date - contains the delivery date of the order
      * $this->attributes['totalPrice'] - int - contains the order total price
@@ -41,6 +42,11 @@ class Order extends Model
     public function getUser(): BelongsTo
     {
         return $this->user;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->attributes['user_id'];
     }
 
     public function getItemInOrder(): HasMany

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ItemInOrder extends Model
 {
@@ -20,6 +21,9 @@ class ItemInOrder extends Model
      * Instrument - belongsTo
      * Lesson - belongsTo
      */
+
+    use HasFactory;
+
     protected $fillable = ['type', 'quantity', 'price', 'instrument_id', 'lesson_id', 'order_id'];
 
     public function instrument()
@@ -75,6 +79,11 @@ class ItemInOrder extends Model
     public function getCustomPrice(int $price): string
     {
         return number_format($price, 2);
+    }
+
+    public function setType(string $type): void
+    {
+        $this->attributes['type'] = $type;
     }
 
     public function setQuantity(int $quantity): void

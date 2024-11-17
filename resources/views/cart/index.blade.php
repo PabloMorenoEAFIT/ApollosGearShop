@@ -48,7 +48,7 @@
         <form action="{{ route('order.checkout') }}" method="POST">
             @csrf
             <input type="hidden" name="cart_items" value="{{ json_encode($viewData['cartProducts']) }}">
-            <button type="submit" class="btn btn-primary"> __('cart.checkout')</button>
+            <button type="submit" class="btn btn-primary">{{ __('cart.checkout') }}</button>
         </form>
 
         <form action="{{ route('cart.removeAll') }}" method="POST" class="d-inline">
@@ -58,7 +58,7 @@
         </form>
     </div>
     @else
-    <p> __('cart.empty_cart')</p>
+    <p>{{ __('cart.empty_cart') }}</p>
     @endif
 </div>
 @endsection

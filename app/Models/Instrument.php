@@ -30,7 +30,7 @@ class Instrument extends Model
      *
      * RELATIONSHIPS
      *
-     * Stock - hasMany
+     * Stock - hasMany()
      * Review - hasMany
      * ItemInOrder - hasMany
      */
@@ -107,7 +107,7 @@ class Instrument extends Model
 
     public function getQuantity(): int
     {
-        return $this->getStocks()->latest('created_at')->value('quantity') ?? 0;
+        return $this->getStocks()->latest('updated_at')->value('quantity') ?? 0;
     }
 
     public function getImage(): string

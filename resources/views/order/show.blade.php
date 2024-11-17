@@ -11,7 +11,7 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5>{{ __('order.id')}} {{ $viewData["order"]->id }}</h5>
+                <h5>{{ __('order.ID')}} {{ $viewData["order"]->id }}</h5>
                 <h5 class="card-title">
                 {{ __('order.creation_date')}} {{ $viewData["order"]->created_at->format('Y-m-d H:i') }}
                 </h5>

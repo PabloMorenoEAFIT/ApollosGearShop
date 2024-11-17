@@ -7,7 +7,7 @@ return [
     'products' => 'Productos',
     'type' => 'Tipo',
     'product_name' => 'Nombre del Producto',
-    'quatity' => 'Cantidad',
+    'quantity' => 'Cantidad',
     'price' => 'Precio',
     'instrument' => 'Instrumento',
     'lesson' => 'Lección',

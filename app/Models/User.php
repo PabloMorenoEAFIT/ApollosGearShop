@@ -20,6 +20,7 @@ class User extends Authenticatable
      * $this->attributes['email'] - string - contains the user email
      * $this->attributes['password'] - string - contains the user password
      * $this->attributes['role'] - string - contains the user role
+     * $this->attributes['is_admin'] - bool - contains the user admin status
      *
      * RELATIONSHIPS
      *
