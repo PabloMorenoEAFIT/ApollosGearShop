@@ -18,11 +18,12 @@
         <div class="col-md-4 col-lg-3 mb-3">
             <div class="card h-100 d-flex flex-column shadow-sm">
                 <!-- Stock Instrument Image -->
-                @if ($stock->instrument && $stock->instrument->getImage())
-                    <img src="{{ asset($stock->instrument->getImage()) }}" class="card-img-top img-card" alt="{{ __('messages.instrument_image_alt') }}">
-                @else
-                    <img src="https://via.placeholder.com/300x200" class="card-img-top img-card" alt="{{ __('messages.no_image_available') }}">
-                @endif
+                <div class="col-md-4">
+                    {{-- 
+                        <img src="{{ $stock->instrument->getImage() }}" class="card-img-top img-card" alt="Instrument Image">
+                    --}}
+                    <img src="{{ asset('storage/' . $stock->instrument->getImage()) }}" class="card-img-top img-card" alt="Instrument Image">
+                </div>
 
                 <div class="card-body d-flex flex-column flex-grow-1">
                     <!-- Instrument Name -->

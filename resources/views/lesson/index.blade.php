@@ -8,6 +8,7 @@
         {{ session('success') }}
     </div>
 @endif
+{{ Breadcrumbs::render() }}
 
 <div class="row">
     @foreach ($viewData["lessons"] as $lesson)

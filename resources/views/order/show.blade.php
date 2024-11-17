@@ -1,8 +1,9 @@
 @extends('layouts.app')
 @section('title', $viewData["title"])
-
 @section('subtitle', $viewData["subtitle"])
+
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
@@ -10,22 +11,59 @@
         </div>
         <div class="col-md-8">
             <div class="card-body">
-                <h5>ID: {{  $viewData["order"]->getId()  }}</h5>
+                <h5>{{ __('order.ID')}} {{ $viewData["order"]->id }}</h5>
                 <h5 class="card-title">
-                    Creation Date: {{ $viewData["order"]->getCreatedAt() }}
+                {{ __('order.creation_date')}} {{ $viewData["order"]->created_at->format('Y-m-d H:i') }}
                 </h5>
                 <h5 class="card-title">
-                    <b>Delivery date: </b>{{--Delivery Date: {{ $viewData["order"]->getDeliveryDate()}}--}}
+                {{ __('order.delivery_date')}} {{ $viewData["order"]->deliveryDate }}
                 </h5>
-            </div>
-            <div class="card-footer text-muted text-center">
-                <form action="{{ route('order.delete', $viewData['order']->getId()) }}" method="POST">
+                <h6>{{ __('order.products')}}</h6>
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>{{ __('order.type')}}</th>
+                            <th>{{ __('order.product_name')}}</th>
+                            <th>{{ __('order.quantity')}}</th>
+                            <th>{{ __('order.price')}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach($viewData["items"] as $item)
+                        <tr>
+                            <td>
+                                @if($item->getType() == 'instrument')
+                                <p>{{ __('order.instrument')}}</p>
+                                @else
+                                <p>{{ __('order.lesson')}}</p>
+                                @endif
+                            </td>
+                            <td>
+                                @if($item->getType() == 'instrument')
+                                {{ $item->getInstrument()->getName() }}
+                                @else
+                                {{ $item->getLesson()->getName() }}
+                                @endif
+                            </td>
+                            <td>
+                                {{ $item->getQuantity() }}
+                            </td>
+                            <td>
+                                $ {{ $item->getCustomPrice($item->getPrice()) }}
+                            </td>
+                        </tr>
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="h3 secondary">
+                    Total: <p class="text-success"> $ {{ $viewData['order']->getCustomTotalPrice() }}</p>
+                </div>
+                <form action="{{ route('order.delete', ['id' => $viewData['order']->id]) }}" method="POST">
                     @csrf
                     @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete order</button>
+                    <button type="submit" class="btn btn-danger">{{ __('order.delete_order')}}</button>
                 </form>
             </div>
-    
         </div>
     </div>
 </div>

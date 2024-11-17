@@ -3,6 +3,7 @@
 @section('subtitle', $viewData["subtitle"])
 @section('content')
 
+{{ Breadcrumbs::render() }}
 <div class="text-info text-center">
     @if (isset($viewData["message"]) && $viewData["message"])
         <h2>{{ $viewData["message"] }}</h2>

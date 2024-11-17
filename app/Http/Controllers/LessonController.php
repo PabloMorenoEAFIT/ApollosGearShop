@@ -44,31 +44,4 @@ class LessonController extends Controller
 
         return view('lesson.show')->with('viewData', $viewData);
     }
-
-    public function create(): View
-    {
-        $viewData = [];
-        $viewData['title'] = 'Create lesson';
-
-        return view('lesson.create')->with('viewData', $viewData);
-    }
-
-    public function save(Request $request): RedirectResponse
-    {
-        $lesson = new Lesson;
-        $validatedData = $lesson->validate($request->all());
-        Lesson::create($validatedData);
-
-        $viewData['message'] = 'Lesson successfully created!';
-
-        return redirect()->route('lesson.index', $viewData);
-    }
-
-    public function delete($id): RedirectResponse
-    {
-        $lesson = Lesson::findOrFail($id);
-        $lesson->delete();
-
-        return redirect()->route('lesson.index')->with('success', 'Lesson deleted successfully.');
-    }
 }

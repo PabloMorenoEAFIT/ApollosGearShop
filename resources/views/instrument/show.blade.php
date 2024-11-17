@@ -4,10 +4,14 @@
 @section('subtitle', $viewData["subtitle"])
 
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
-            <img src="{{ $viewData['instrument']->getImage() }}" class="card-img-top img-card" alt="{{ __('attributes.instrument_image') }}">
+            {{-- 
+                <img src="{{ $viewData['instrument']->getImage() }}" class="card-img-top img-card" alt="Instrument Image">
+            --}}
+            <img src="{{ asset('storage/' . $viewData['instrument']->getImage()) }}" class="card-img-top img-card" alt="Instrument Image">
         </div>
         <div class="col-md-8">
             <div class="card-body">
@@ -54,23 +58,13 @@
                 </table>
 
                 <!-- Show instrument reviews -->
-                @include('review.show', ['viewData' => $viewData])
+                @include('components.review.review_list', ['viewData' => $viewData])
 
             </div>
-
-            <!-- Card Footer with Delete Button -->
-            <div class="card-footer text-muted text-center">
-                <!-- Delete Form -->
-                <form action="{{ route('instrument.delete', $viewData['instrument']->getId()) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">{{ __('messages.delete_instrument') }}</button>
-                </form>
-
+                @csrf
                 <!-- Include Add to Cart Form for Instruments -->
-                @include('cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument'])
-
-            </div>
+                @include('components.cart.add', ['productId' => $viewData['instrument']->getId(), 'productType' => 'Instrument', 'maxQuantity' => $viewData['instrument']->getQuantity()])
+            </div> 
         </div>
     </div>
 </div>

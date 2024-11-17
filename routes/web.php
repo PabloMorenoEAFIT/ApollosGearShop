@@ -6,27 +6,28 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'App\Http\Controllers\HomeController@index')->name('home.index');
 
+// user routes
 // lessons routes
 Route::get('/lessons', 'App\Http\Controllers\LessonController@index')->name('lesson.index');
-Route::get('/lessons/create', 'App\Http\Controllers\LessonController@create')->name('lesson.create');
-Route::post('/lessons/save', 'App\Http\Controllers\LessonController@save')->name('lesson.save');
-Route::get('/lessons/success', 'App\Http\Controllers\LessonController@success')->name('lesson.success');
 Route::get('/lessons/{id}', 'App\Http\Controllers\LessonController@show')->name('lesson.show');
-Route::delete('/lessons/{id}', 'App\Http\Controllers\LessonController@delete')->name('lesson.delete');
+// Route::get('/lessons/create', 'App\Http\Controllers\LessonController@create')->name('lesson.create');
+// Route::post('/lessons/save', 'App\Http\Controllers\LessonController@save')->name('lesson.save');
+// Route::get('/lessons/success', 'App\Http\Controllers\LessonController@success')->name('lesson.success');
+// Route::delete('/lessons/{id}', 'App\Http\Controllers\LessonController@delete')->name('lesson.delete');
 
 // orders routes
 Route::get('/orders', 'App\Http\Controllers\OrderController@index')->name('order.index');
+Route::get('/orders/{id}', 'App\Http\Controllers\OrderController@show')->name('order.show');
 Route::get('/orders/create', 'App\Http\Controllers\OrderController@create')->name('order.create');
 Route::post('/orders/save', 'App\Http\Controllers\OrderController@save')->name('order.save');
-Route::get('/orders/{id}', 'App\Http\Controllers\OrderController@show')->name('order.show');
 Route::delete('/orders/{id}', 'App\Http\Controllers\OrderController@delete')->name('order.delete');
 
 // instrument routes
 Route::get('/instruments', 'App\Http\Controllers\InstrumentController@index')->name('instrument.index');
-Route::get('/instruments/create', 'App\Http\Controllers\InstrumentController@create')->name('instrument.create');
 Route::get('/instruments/{id}', 'App\Http\Controllers\InstrumentController@show')->name('instrument.show');
-Route::post('/instruments/save', 'App\Http\Controllers\InstrumentController@save')->name('instrument.save');
-Route::delete('/instruments/{id}', 'App\Http\Controllers\InstrumentController@delete')->name('instrument.delete');
+// Route::get('/instruments/create', 'App\Http\Controllers\InstrumentController@create')->name('instrument.create');
+// Route::post('/instruments/save', 'App\Http\Controllers\InstrumentController@save')->name('instrument.save');
+// Route::delete('/instruments/{id}', 'App\Http\Controllers\InstrumentController@delete')->name('instrument.delete');
 
 // stock routes
 Route::get('/stocks', 'App\Http\Controllers\StockController@index')->name('stock.index');
@@ -42,15 +43,37 @@ Route::post('/instruments/{id}/save-review', 'App\Http\Controllers\ReviewControl
 // cart routes
 Route::get('/cart', 'App\Http\Controllers\CartController@index')->name('cart.index');
 Route::post('/cart/add/{id}/{type}', 'App\Http\Controllers\CartController@add')->name('cart.add');
-Route::get('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
+Route::delete('/cart/remove-item/{id}/{type}', 'App\Http\Controllers\CartController@removeItem')->name('cart.removeItem');
+Route::delete('/cart/removeAll/', 'App\Http\Controllers\CartController@removeAll')->name('cart.removeAll');
 
-/*
-Route::middleware([CheckGroup::class.':user'])->group(function () {
+Route::get('/order', 'App\Http\Controllers\OrderController@index')->name('order.index');
+Route::post('/checkout', 'App\Http\Controllers\OrderController@checkout')->name('order.checkout');
+Route::get('/order/{id}', 'App\Http\Controllers\OrderController@show')->name('order.show');
+// Admin routes
+Route::middleware([CheckGroup::class.':admin'])->group(function () {
+    Route::get('/admin', 'App\Http\Controllers\Admin\DashboardController@index')->name('admin.index');
+
+    Route::get('/admin/lesson', 'App\Http\Controllers\Admin\AdminLessonController@lesson_index')->name('admin.lesson.index');
+    Route::get('/admin/lesson/create', 'App\Http\Controllers\Admin\AdminLessonController@lesson_create')->name('admin.lesson.create');
+    Route::post('/admin/lesson/save', 'App\Http\Controllers\Admin\AdminLessonController@lesson_save')->name('admin.lesson.save');
+    Route::get('/admin/lesson/{id}', 'App\Http\Controllers\Admin\AdminLessonController@lesson_show')->name('admin.lesson.show');
+    Route::delete('/admin/lesson/{id}', 'App\Http\Controllers\Admin\AdminLessonController@lesson_delete')->name('admin.lesson.delete');
+
+    Route::get('/admin/instrument', 'App\Http\Controllers\Admin\AdminInstrumentController@instrument_index')->name('admin.instrument.index');
+    Route::get('/admin/instrument/create', 'App\Http\Controllers\Admin\AdminInstrumentController@instrument_create')->name('admin.instrument.create');
+    Route::post('/admin/instrument/save', 'App\Http\Controllers\Admin\AdminInstrumentController@instrument_save')->name('admin.instrument.save');
+    Route::get('/admin/instrument/{id}', 'App\Http\Controllers\Admin\AdminInstrumentController@instrument_show')->name('admin.instrument.show');
+    Route::delete('/admin/instruments/{id}', 'App\Http\Controllers\Admin\AdminInstrumentController@instrument_delete')->name('admin.instrument.delete');
+
+    Route::get('/admin/stock', 'App\Http\Controllers\Admin\AdminStockController@stock_index')->name('admin.stock.index');
+    Route::get('/admin/stock/{id}', 'App\Http\Controllers\Admin\AdminStockController@stock_show')->name('admin.stock.show');
+    Route::post('/admin/stock/{id}/add', 'App\Http\Controllers\Admin\AdminStockController@addStock')->name('admin.stock.add');
+    Route::post('/admin/stock/{id}/lower', 'App\Http\Controllers\Admin\AdminStockController@lowerStock')->name('admin.stock.lower');
+    Route::delete('/admin/stock/{id}/delete', 'App\Http\Controllers\Admin\AdminStockController@delete')->name('admin.stock.delete');
 
 });
 
-Route::middleware([])->group(function () {
-});
-*/
+// Route::middleware([])->group(function () {
+// });
 
 Auth::routes();

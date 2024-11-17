@@ -11,20 +11,19 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('instruments', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->string('difficulty');
-            $table->string('schedule');
-            $table->integer('totalHours');
-            $table->string('location');
+            $table->string('category');
+            $table->string('brand');
             $table->integer('price');
-            $table->float('reviewSum');
-            $table->integer('numberOfReviews');
-            $table->integer('quantity');
+            $table->float('reviewSum')->default(0); // Establece valor por defecto
+            $table->integer('numberOfReviews')->default(0); // Establece valor por defecto
+            $table->integer('quantity')->default(1);
             $table->string('image');
             $table->timestamps();
+
         });
     }
 
@@ -33,6 +32,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('instruments');
     }
 };

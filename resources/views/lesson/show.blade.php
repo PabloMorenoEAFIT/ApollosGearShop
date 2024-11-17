@@ -4,6 +4,7 @@
 @section('subtitle', $viewData["subtitle"])
 
 @section('content')
+{{ Breadcrumbs::render() }}
 <div class="card mb-3">
     <div class="row g-0">
         <div class="col-md-4">
@@ -55,13 +56,6 @@
             </div>
             
             <div class="card-footer text-muted text-center">
-                <!-- Delete Lesson -->
-                <form action="{{ route('lesson.delete', $viewData['lesson']->getId()) }}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-danger">Delete lesson</button>
-                </form>
-                
                 <!-- Add to Cart -->
                 <form action="{{ route('cart.add', ['id' => $viewData['lesson']->getId(), 'type'=> 'Lesson']) }}" method="POST">
                     @csrf

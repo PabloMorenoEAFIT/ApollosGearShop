@@ -28,7 +28,7 @@ return [
         'price' => 'Enter price',
         'quantity' => 'Enter quantity',
         'type' => 'Enter type',
-        'comments' => 'Enter comments',
+        'comments' => 'By comments',
         'rating' => 'Enter a rating (1-5)',
         'ascending' => 'Ascending',
         'descending' => 'Descending',

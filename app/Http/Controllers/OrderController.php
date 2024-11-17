@@ -2,17 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Order; 
-use App\Services\ImageService;
+use App\Models\Order;
+use App\Util\OrderUtils;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
+use InvalidArgumentException;
 
 class OrderController extends Controller
 {
-    protected ImageService $imageService;
-
-    public function index(): view
+    public function index(Request $request): View
     {
         $viewData = [
             'title' => 'Order - Online Store',
@@ -21,45 +21,72 @@ class OrderController extends Controller
         ];
 
         return view('order.index')->with('viewData', $viewData);
-
     }
 
-    public function show(string $id): View
+    public function checkout(Request $request): RedirectResponse
     {
-        $order = Order::findOrFail($id);
+        $cartItems = $request->session()->get('cart_items', []);
+
+        if (! OrderUtils::validateSessionItems($cartItems)) {
+            return redirect()->back()->withErrors('Invalid cart items format.');
+        }
+
+        $validator = Validator::make($request->all(), [
+            'cart_items' => 'required|json',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+        // Decode cart items
+        $cartItems = json_decode($request->input('cart_items'), true) ?? $cartItems;
+
+        try {
+            $result = OrderUtils::processCheckoutItems($cartItems);
+            $itemInOrders = $result['itemInOrders'];
+            $total = $result['total'];
+        } catch (InvalidArgumentException $e) {
+            return redirect()->back()->withErrors($e->getMessage());
+        }
+
+        if ($total <= 0) {
+            return redirect()->back()->withErrors('Invalid total amount.');
+        }
+
+        $order = OrderUtils::createOrder($total, $itemInOrders, auth()->id());
+
+        $request->session()->forget('cart_items');
+
+        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
+    }
+
+    public function show(int $id): View
+    {
+        $order = Order::with('itemInOrders')->findOrFail($id);
+        $items = $order->getItemInOrder()->get();
+
+        foreach ($items as $item) {
+            $item->price = $item->getPrice() * $item->getQuantity();
+        }
 
         $viewData = [
-            'title' => $order->getId().' - AGS',
-            'subtitle' => $order->getId().' - order information',
+            'title' => 'Order Details',
+            'subtitle' => 'Order ID: '.$order->getId(),
             'order' => $order,
+            'items' => $items,
         ];
 
         return view('order.show')->with('viewData', $viewData);
     }
 
-    public function create(): View
-    {
-        $viewData['title'] = 'Create Order';
-
-        return view('order.create')->with('viewData', $viewData);
-    }
-
-    public function save(Request $request): RedirectResponse
-    {
-        $order = new Order;
-        $validatedData = $order->validate($request->all());
-        $order = Order::create($validatedData);
-
-        $viewData['message'] = 'Order successfully created!';
-
-        return redirect()->route('home.index')->with('success', $viewData['message']);
-    }
-
-    public function delete($id): RedirectResponse
+    public function delete(int $id): RedirectResponse
     {
         $order = Order::findOrFail($id);
+
+        OrderUtils::restoreStock($order);
+
         $order->delete();
 
-        return redirect()->route('order.index')->with('success', 'order deleted successfully.');
+        return redirect()->route('order.index')->with('message', 'Order deleted successfully.');
     }
 }
