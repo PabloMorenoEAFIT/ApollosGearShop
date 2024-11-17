@@ -49,7 +49,7 @@ class AdminLessonController extends Controller
 
         $viewData['message'] = 'Lesson successfully created!';
 
-        return redirect()->route('admin.lesson.index')->with('message', $viewData['message']);
+        return redirect()->route('admin.lesson')->with('message', $viewData['message']);
     }
 
     public function lesson_show(string $id, Request $request): View|RedirectResponse
