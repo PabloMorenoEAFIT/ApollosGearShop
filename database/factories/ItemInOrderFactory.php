@@ -2,10 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\ItemInOrder;
-use App\Models\Order;
 use App\Models\Instrument;
+use App\Models\ItemInOrder;
 use App\Models\Lesson;
+use App\Models\Order;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class ItemInOrderFactory extends Factory

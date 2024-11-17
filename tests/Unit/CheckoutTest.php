@@ -2,19 +2,21 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Models\User;
-use App\Models\Order;
 use App\Models\Instrument;
-use App\Models\Lesson;
 use App\Models\ItemInOrder;
+use App\Models\Lesson;
+use App\Models\Order;
+use App\Models\User;
 use App\Util\OrderUtils;
-use Illuminate\Support\Facades\Session;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Session;
+use Tests\TestCase;
 
 class CheckoutTest extends TestCase
 {
-    use RefreshDatabase;
+    //use RefreshDatabase; // If you run with this all your db data will be lost
+    use DatabaseTransactions;
 
     public function test_checkout_process_successfully()
     {

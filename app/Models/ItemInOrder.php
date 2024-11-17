@@ -2,8 +2,8 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
 
 class ItemInOrder extends Model
 {
@@ -21,7 +21,6 @@ class ItemInOrder extends Model
      * Instrument - belongsTo
      * Lesson - belongsTo
      */
-
     use HasFactory;
 
     protected $fillable = ['type', 'quantity', 'price', 'instrument_id', 'lesson_id', 'order_id'];

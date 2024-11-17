@@ -48,12 +48,11 @@ class InstrumentFactory extends Factory
             $instrument->stocks()->create([
                 'quantity' => $stockQuantity,
                 'type' => 'Add',
-                'comments' => 'Initial stock for ' . $instrument->name,
+                'comments' => 'Initial stock for '.$instrument->name,
             ]);
         });
     }
 }
-
 
 /*
     namespace Database\Factories;

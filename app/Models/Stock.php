@@ -137,7 +137,7 @@ class Stock extends Model
             ->orderBy('updated_at', 'desc')
             ->first();
 
-        if (!$latestStock) {
+        if (! $latestStock) {
             throw new InvalidArgumentException('No stock available for this instrument.');
         }
 
@@ -154,7 +154,6 @@ class Stock extends Model
             'instrument_id' => $this->attributes['instrument_id'],
         ]);
     }
-
 
     public function getLatestStocks(): object
     {

@@ -2,25 +2,24 @@
 
 namespace App\Util;
 
-use App\Models\Order;
-use App\Models\User;
-use App\Models\Stock;
-use App\Models\ItemInOrder;
 use App\Models\Instrument;
+use App\Models\ItemInOrder;
 use App\Models\Lesson;
-use Illuminate\Http\RedirectResponse;
-use InvalidArgumentException;
+use App\Models\Order;
+use App\Models\Stock;
 use Illuminate\Support\Facades\Log;
+use InvalidArgumentException;
 
 class OrderUtils
 {
     public static function validateSessionItems(array $cartItems)
     {
         foreach ($cartItems as $item) {
-            if (!isset($item['type']) || !isset($item['quantity'])) {
+            if (! isset($item['type']) || ! isset($item['quantity'])) {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -38,7 +37,7 @@ class OrderUtils
                 ? Lesson::find($productData['id'])
                 : Instrument::find($productData['id']);
 
-            if (!$product) {
+            if (! $product) {
                 throw new InvalidArgumentException('Product not found.');
             }
 
@@ -50,27 +49,25 @@ class OrderUtils
             $total += $price * $quantity;
 
             if ($quantity > $availableQuantity) {
-                throw new InvalidArgumentException('Requested quantity exceeds available stock for ' . $productName);
+                throw new InvalidArgumentException('Requested quantity exceeds available stock for '.$productName);
             }
 
             // Lower stock for instruments
             if ($item['type'] != 'Lesson') {
                 try {
-                    //$product->getStocks()->latest()->first()->lowerStock($quantity, 'Order checkout');
-
-                    $stock = $product->getStocks()->latest()->first(); 
+                    $stock = $product->getStocks()->latest()->first();
 
                     if ($stock) {
-                        $stock->quantity -= $quantity;  
+                        $stock->quantity -= $quantity;
                         $stock->comments = 'Order checkout';
-                        $stock->save(); 
+                        $stock->save();
                     } else {
                         throw new InvalidArgumentException('No stock found for this product.');
                     }
-                    $product->refresh();    
+                    $product->refresh();
 
                 } catch (InvalidArgumentException $e) {
-                    throw new InvalidArgumentException('Error updating stock for ' . $productName . ': ' . $e->getMessage());
+                    throw new InvalidArgumentException('Error updating stock for '.$productName.': '.$e->getMessage());
                 }
             }
 
@@ -84,6 +81,7 @@ class OrderUtils
             ]);
             $itemInOrders[] = $itemInOrder;
         }
+
         //dd( $itemInOrders);
         return ['itemInOrders' => $itemInOrders, 'total' => $total];
     }
@@ -91,7 +89,7 @@ class OrderUtils
     // Create the order and save it to the database
     public static function createOrder(float $total, array $itemInOrders, int $userId): Order
     {
-        $order = new Order();
+        $order = new Order;
         $order->creationDate = now();
         $order->deliveryDate = now()->addDays(7);
         $order->totalPrice = $total;
@@ -120,7 +118,7 @@ class OrderUtils
                         try {
                             $latestStock->addStock($itemInOrder->quantity, 'Order cancellation');
                         } catch (InvalidArgumentException $e) {
-                            Log::error('Error updating stock: ' . $e->getMessage());
+                            Log::error('Error updating stock: '.$e->getMessage());
                         }
                     }
                 }

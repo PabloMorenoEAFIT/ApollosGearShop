@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
 use App\Models\Order;
 use App\Util\OrderUtils;
-use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use InvalidArgumentException;
@@ -28,10 +27,10 @@ class OrderController extends Controller
     {
         $cartItems = $request->session()->get('cart_items', []);
 
-        if (!OrderUtils::validateSessionItems($cartItems)) {
+        if (! OrderUtils::validateSessionItems($cartItems)) {
             return redirect()->back()->withErrors('Invalid cart items format.');
         }
-        
+
         $validator = Validator::make($request->all(), [
             'cart_items' => 'required|json',
         ]);
@@ -49,16 +48,16 @@ class OrderController extends Controller
         } catch (InvalidArgumentException $e) {
             return redirect()->back()->withErrors($e->getMessage());
         }
-        
+
         if ($total <= 0) {
             return redirect()->back()->withErrors('Invalid total amount.');
         }
-        
+
         $order = OrderUtils::createOrder($total, $itemInOrders, auth()->id());
 
         $request->session()->forget('cart_items');
 
-        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $' . number_format($total / 100, 2));
+        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
     }
 
     public function show(int $id): View
@@ -83,12 +82,11 @@ class OrderController extends Controller
     public function delete(int $id): RedirectResponse
     {
         $order = Order::findOrFail($id);
-   
+
         OrderUtils::restoreStock($order);
 
         $order->delete();
 
         return redirect()->route('order.index')->with('message', 'Order deleted successfully.');
     }
-
 }
