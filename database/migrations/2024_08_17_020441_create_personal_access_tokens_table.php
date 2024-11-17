@@ -11,16 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('lessons', function (Blueprint $table) {
+        Schema::create('personal_access_tokens', function (Blueprint $table) {
             $table->id();
+            $table->morphs('tokenable');
             $table->string('name');
-            $table->string('description');
-            $table->string('difficulty');
-            $table->string('schedule');
-            $table->integer('totalHours');
-            $table->string('location');
-            $table->integer('price');
-            $table->string('teacher');
+            $table->string('token', 64)->unique();
+            $table->text('abilities')->nullable();
+            $table->timestamp('last_used_at')->nullable();
+            $table->timestamp('expires_at')->nullable();
             $table->timestamps();
         });
     }
@@ -30,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('lessons');
+        Schema::dropIfExists('personal_access_tokens');
     }
 };
