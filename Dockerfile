@@ -34,7 +34,7 @@ ENV DB_PASSWORD=password
 RUN php artisan key:generate
 
 # Migrar la base de datos (asegúrate de que la base de datos esté accesible)
-RUN php artisan migrate --force
+RUN php artisan migrate
 
 # Ajustar permisos
 RUN chmod -R 777 /var/www/html/storage /var/www/html/bootstrap/cache
