@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Order;
 use App\Util\OrderUtils;
 use Illuminate\Http\RedirectResponse;
@@ -10,27 +11,21 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\View\View;
 use InvalidArgumentException;
 
-class OrderController extends Controller
+class AdminOrderController extends Controller
 {
     public function index(Request $request): View
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
         $viewData = [
             'title' => 'Order - Online Store',
             'subtitle' => __('navbar.list_orders'),
-            'orders' => Order::where('user_id', $user->getId())->get(),
+            'orders' => Order::all(),
         ];
 
-        return view('order.index')->with('viewData', $viewData);
+        return view('admin.order.index')->with('viewData', $viewData);
     }
 
     public function checkout(Request $request): RedirectResponse
-    {
+    {        
         $cartItems = $request->session()->get('cart_items', []);
 
         if (! OrderUtils::validateSessionItems($cartItems)) {
@@ -63,21 +58,12 @@ class OrderController extends Controller
 
         $request->session()->forget('cart_items');
 
-        // return redirect()->route('order.show')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
-        return redirect()->route('order.show', ['id' => $order->id])
-        ->with('message', 'Checkout successful! Your order total is $' . number_format($total / 100, 2));
+        return redirect()->route('order.index')->with('message', 'Checkout successful! Your order total is $'.number_format($total / 100, 2));
     }
 
     public function show(int $id): View
     {
-        $user = auth()->user();
-
-        if (!$user) {
-            return redirect()->route('login');
-        }
-
-        $order = Order::with('itemInOrders')->where('id', $id)->where('user_id', $user->getId())->firstOrFail();
-
+        $order = Order::with('itemInOrders')->findOrFail($id);
         $items = $order->getItemInOrder()->get();
 
         foreach ($items as $item) {
@@ -91,6 +77,17 @@ class OrderController extends Controller
             'items' => $items,
         ];
 
-        return view('order.show')->with('viewData', $viewData);
+        return view('admin.order.show')->with('viewData', $viewData);
+    }
+
+    public function delete(int $id): RedirectResponse
+    {
+        $order = Order::findOrFail($id);
+
+        OrderUtils::restoreStock($order);
+
+        $order->delete();
+
+        return redirect()->route('admin.index')->with('message', 'Order deleted successfully.');
     }
 }

@@ -53,10 +53,10 @@ class BreadcrumbServiceProvider extends ServiceProvider
             $trail->push("Instrument $id", route('instrument.show', $id));
         });
 
-        // Stocks
+        // Stock
         Breadcrumbs::for('stock.index', function (BreadcrumbTrail $trail) {
             $trail->parent('home.index');
-            $trail->push('Stocks', route('stock.index'));
+            $trail->push('Stock', route('stock.index'));
         });
 
         Breadcrumbs::for('stock.show', function (BreadcrumbTrail $trail, $id) {
@@ -119,12 +119,22 @@ class BreadcrumbServiceProvider extends ServiceProvider
 
         Breadcrumbs::for('admin.stock.index', function (BreadcrumbTrail $trail) {
             $trail->parent('admin.index');
-            $trail->push('Stocks', route('admin.stock.index'));
+            $trail->push('Stock2', route('admin.stock.index'));
         });
 
         Breadcrumbs::for('admin.stock.show', function (BreadcrumbTrail $trail, $id) {
             $trail->parent('admin.stock.index');
             $trail->push("Stock $id", route('admin.stock.show', $id));
+        });
+
+        Breadcrumbs::for('admin.order.index', function (BreadcrumbTrail $trail) {
+            $trail->parent('admin.index');
+            $trail->push("Order", route('admin.order.index'));
+        });
+
+        Breadcrumbs::for('admin.order.show', function (BreadcrumbTrail $trail, $id) {
+            $trail->parent('admin.order.index');
+            $trail->push("Order $id", route('admin.order.show', $id));
         });
     }
 }

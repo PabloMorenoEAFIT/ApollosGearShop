@@ -11,20 +11,22 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('instruments', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('description');
-            $table->string('category');
-            $table->string('brand');
-            $table->integer('price');
-            $table->float('reviewSum')->default(0); // Establece valor por defecto
-            $table->integer('numberOfReviews')->default(0); // Establece valor por defecto
-            $table->integer('quantity')->default(1);
-            $table->string('image');
-            $table->timestamps();
+        if (!Schema::hasTable('')) {
+            Schema::create('instruments', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('description');
+                $table->string('category');
+                $table->string('brand');
+                $table->integer('price');
+                $table->float('reviewSum')->default(0); 
+                $table->integer('numberOfReviews')->default(0);
+                $table->integer('quantity')->default(1);
+                $table->string('image');
+                $table->timestamps();
 
-        });
+            });
+        }
     }
 
     /**
