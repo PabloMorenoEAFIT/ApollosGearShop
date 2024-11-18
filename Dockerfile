@@ -24,9 +24,9 @@ RUN composer install \
 # Asegurarse de que las variables de entorno estén configuradas
 ENV APP_KEY=somekey
 ENV DB_CONNECTION=mysql
-ENV DB_HOST=127.0.0.1
+ENV DB_HOST=35.184.121.46
 ENV DB_PORT=3306
-ENV DB_DATABASE=apollosgearshopdb
+ENV DB_DATABASE=laravelproyect
 ENV DB_USERNAME=root
 ENV DB_PASSWORD=password
 
