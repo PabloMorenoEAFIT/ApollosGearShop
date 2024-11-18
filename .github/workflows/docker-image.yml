@@ -24,4 +24,4 @@ jobs:
       run: docker build . --file Dockerfile --tag pablomorenoquintero/apollos-gear-shop:latest
       
     - name: Docker Push
-      run: docker push pablomorenoquintero/apollos-gear-shop:latest
+      run: docker push pablomorenoquintero/apollos-gear-shop
