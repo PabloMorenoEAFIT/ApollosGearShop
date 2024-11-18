@@ -1,0 +1,43 @@
+name: OWASP ZAP Security Scan
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  owasp-zap:
+    runs-on: ubuntu-latest
+
+    services:
+      zap:
+        image: owasp/zap2docker-stable
+        options: --health-cmd "zap-cli --health-check" --health-timeout 30s --health-retries 3
+        ports:
+          - 8080:8080
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
+
+    - name: Start OWASP ZAP and perform security scan
+      run: |
+        sleep 30
+        docker run --rm -t owasp/zap2docker-stable zap-full-scan.py \
+          -t http://your-application-url.com \
+          -g gen.conf -r zap_report.html
+        
+    - name: Upload OWASP ZAP report to GitHub Actions
+      uses: actions/upload-artifact@v3
+      with:
+        name: zap-report
+        path: zap_report.html
+
+    - name: Print OWASP ZAP scan results
+      run: cat zap_report.html
